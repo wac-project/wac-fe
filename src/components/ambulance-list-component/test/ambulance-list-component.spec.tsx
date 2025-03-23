@@ -10,7 +10,7 @@ describe('ambulance-list-component', () => {
     expect(page.root).toEqualHtml(`
       <ambulance-list-component>
         <mock:shadow-root>
-          <slot></slot>
+        Správa ambulancií
         </mock:shadow-root>
       </ambulance-list-component>
     `);

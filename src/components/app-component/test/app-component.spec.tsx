@@ -10,7 +10,7 @@ describe('app-component', () => {
     expect(page.root).toEqualHtml(`
       <app-component>
         <mock:shadow-root>
-          <slot></slot>
+        <ambulance-list-component></ambulance-list-component>
         </mock:shadow-root>
       </app-component>
     `);
