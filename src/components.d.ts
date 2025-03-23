@@ -6,56 +6,45 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first": string;
-        /**
-          * The last name
-         */
-        "last": string;
-        /**
-          * The middle name
-         */
-        "middle": string;
+    interface AmbulanceListComponent {
+    }
+    interface AppComponent {
     }
 }
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
+    interface HTMLAmbulanceListComponentElement extends Components.AmbulanceListComponent, HTMLStencilElement {
     }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
+    var HTMLAmbulanceListComponentElement: {
+        prototype: HTMLAmbulanceListComponentElement;
+        new (): HTMLAmbulanceListComponentElement;
+    };
+    interface HTMLAppComponentElement extends Components.AppComponent, HTMLStencilElement {
+    }
+    var HTMLAppComponentElement: {
+        prototype: HTMLAppComponentElement;
+        new (): HTMLAppComponentElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
+        "ambulance-list-component": HTMLAmbulanceListComponentElement;
+        "app-component": HTMLAppComponentElement;
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first"?: string;
-        /**
-          * The last name
-         */
-        "last"?: string;
-        /**
-          * The middle name
-         */
-        "middle"?: string;
+    interface AmbulanceListComponent {
+    }
+    interface AppComponent {
     }
     interface IntrinsicElements {
-        "my-component": MyComponent;
+        "ambulance-list-component": AmbulanceListComponent;
+        "app-component": AppComponent;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "ambulance-list-component": LocalJSX.AmbulanceListComponent & JSXBase.HTMLAttributes<HTMLAmbulanceListComponentElement>;
+            "app-component": LocalJSX.AppComponent & JSXBase.HTMLAttributes<HTMLAppComponentElement>;
         }
     }
 }
