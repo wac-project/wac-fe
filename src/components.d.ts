@@ -10,6 +10,8 @@ export namespace Components {
     }
     interface AppComponent {
     }
+    interface HeaderNavComponent {
+    }
 }
 declare global {
     interface HTMLAmbulanceListComponentElement extends Components.AmbulanceListComponent, HTMLStencilElement {
@@ -24,9 +26,16 @@ declare global {
         prototype: HTMLAppComponentElement;
         new (): HTMLAppComponentElement;
     };
+    interface HTMLHeaderNavComponentElement extends Components.HeaderNavComponent, HTMLStencilElement {
+    }
+    var HTMLHeaderNavComponentElement: {
+        prototype: HTMLHeaderNavComponentElement;
+        new (): HTMLHeaderNavComponentElement;
+    };
     interface HTMLElementTagNameMap {
         "ambulance-list-component": HTMLAmbulanceListComponentElement;
         "app-component": HTMLAppComponentElement;
+        "header-nav-component": HTMLHeaderNavComponentElement;
     }
 }
 declare namespace LocalJSX {
@@ -34,9 +43,12 @@ declare namespace LocalJSX {
     }
     interface AppComponent {
     }
+    interface HeaderNavComponent {
+    }
     interface IntrinsicElements {
         "ambulance-list-component": AmbulanceListComponent;
         "app-component": AppComponent;
+        "header-nav-component": HeaderNavComponent;
     }
 }
 export { LocalJSX as JSX };
@@ -45,6 +57,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "ambulance-list-component": LocalJSX.AmbulanceListComponent & JSXBase.HTMLAttributes<HTMLAmbulanceListComponentElement>;
             "app-component": LocalJSX.AppComponent & JSXBase.HTMLAttributes<HTMLAppComponentElement>;
+            "header-nav-component": LocalJSX.HeaderNavComponent & JSXBase.HTMLAttributes<HTMLHeaderNavComponentElement>;
         }
     }
 }

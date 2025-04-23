@@ -6,10 +6,15 @@
   box-sizing: border-box;
 }
 
-table {
-  border-collapse: collapse;
+.table-container {
+  position: relative;
   width: 80%;
   max-width: 800px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
   background-color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
@@ -40,4 +45,10 @@ button[part="stats-button"] {
 
 button[part="stats-button"]:hover {
   background-color: #0056b3;
+}
+
+.refresh-button {
+  position: absolute;
+  bottom: -3rem; /* Adjusts distance from the table */
+  right: 0;
 }

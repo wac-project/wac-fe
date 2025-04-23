@@ -8,19 +8,7 @@ import { Component, Host, State, h } from '@stencil/core';
 export class AmbulanceListComponent {
   @State() ambulances: any[];
 
-  // This will be the real API call to fetch ambulances when it's ready
-  // private async fetchAmbulancesFromApi() {
-  //   try {
-  //     const response = await fetch('https://your-api-endpoint.com/api/ambulances');
-  //     const data = await response.json();
-  //     this.ambulances = data;
-  //   } catch (error) {
-  //     console.error('Error fetching ambulances:', error);
-  //   }
-  // }
-
   private async getAmbulancesAsync() {
-    // Mocked data until the real API is ready
     return await Promise.resolve([
       {
         name: 'Ambulancia 1',
@@ -43,35 +31,44 @@ export class AmbulanceListComponent {
     ]);
   }
 
-  async componentWillLoad() {
+  private async refreshAmbulances() {
     this.ambulances = await this.getAmbulancesAsync();
+  }
+
+  async componentWillLoad() {
+    await this.refreshAmbulances();
   }
 
   render() {
     return (
       <Host>
-        <table>
-          <thead>
-            <tr>
-              <th>Ambulancia</th>
-              <th>Lekár</th>
-              <th>Štatistiky</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.ambulances.map((ambulance) => (
+        <div class="table-container">
+          <table>
+            <thead>
               <tr>
-                <td>{ambulance.name}</td>
-                <td>{ambulance.lekar}</td>
-                <td>
-                  <button part="stats-button" onClick={() => console.log('Show stats for', ambulance.ambulanceId)}>
-                    Štatistiky
-                  </button>
-                </td>
+                <th>Ambulancia</th>
+                <th>Lekár</th>
+                <th>Štatistiky</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {this.ambulances.map((ambulance) => (
+                <tr>
+                  <td>{ambulance.name}</td>
+                  <td>{ambulance.lekar}</td>
+                  <td>
+                    <button part="stats-button" onClick={() => console.log('Show stats for', ambulance.ambulanceId)}>
+                      Štatistiky
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <button class="refresh-button" part="stats-button" onClick={() => this.refreshAmbulances()}>
+            Obnoviť zoznam
+          </button>
+        </div>
       </Host>
     );
   }

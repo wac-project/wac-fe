@@ -9,6 +9,7 @@ export class AppComponent {
   render() {
     return (
       <Host>
+        <header-nav-component></header-nav-component>
         <ambulance-list-component></ambulance-list-component>
       </Host>
     );

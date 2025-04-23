@@ -1,0 +1,64 @@
+:host {
+  display: block;
+}
+
+.header {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 100;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  user-select: none;
+  text-decoration: none;       /* prevent underline */
+}
+
+.brand:hover {
+  color: #007bff;
+  text-decoration: none;       /* ensure no underline on hover */
+  cursor: pointer;             /* extra safety */
+}
+
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.menu li {
+  margin-left: 1rem;
+}
+
+.nav-button {
+  display: inline-block;
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #007bff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.nav-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
