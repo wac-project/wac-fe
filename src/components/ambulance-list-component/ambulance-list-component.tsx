@@ -1,4 +1,5 @@
-import { Component, Host, State, h } from '@stencil/core';
+import { Component, Event, Host, h, Prop, State, EventEmitter } from '@stencil/core';
+import { Ambulance, AmbulanceManagementApi, Configuration } from '../../api/ambulance';
 
 @Component({
   tag: 'ambulance-list-component',
@@ -6,29 +7,28 @@ import { Component, Host, State, h } from '@stencil/core';
   shadow: true,
 })
 export class AmbulanceListComponent {
-  @State() ambulances: any[];
+  @Event({ eventName: 'entry-clicked' }) entryClicked: EventEmitter<string>;
+  @Prop() apiBase: string;
+  @State() errorMessage: string;
+  ambulances: any[];
 
-  private async getAmbulancesAsync() {
-    return await Promise.resolve([
-      {
-        name: 'Ambulancia 1',
-        ambulanceId: '10001',
-        createdAt: new Date(Date.now() + 65 * 60),
-        lekar: 'Dr 1',
-      },
-      {
-        name: 'Ambulancia 2',
-        ambulanceId: '10096',
-        createdAt: new Date(Date.now() + 30 * 60),
-        lekar: 'Dr 2',
-      },
-      {
-        name: 'Ambulancia 3',
-        ambulanceId: '10028',
-        createdAt: new Date(Date.now() + 5 * 60),
-        lekar: 'Dr 3',
-      },
-    ]);
+  private async getAmbulancesAsync(): Promise<Ambulance[]> {
+    try {
+      const configuration = new Configuration({
+        basePath: this.apiBase,
+      });
+
+      const ambulanceApi = new AmbulanceManagementApi(configuration);
+      const response = await ambulanceApi.getAmbulancesRaw();
+      if (response.raw.status < 299) {
+        return await response.value();
+      } else {
+        this.errorMessage = `Cannot retrieve list of ambulances: ${response.raw.statusText}`;
+      }
+    } catch (err: any) {
+      this.errorMessage = `Cannot retrieve list of ambulances: ${err.message || 'unknown'}`;
+    }
+    return [];
   }
 
   private async refreshAmbulances() {
@@ -36,7 +36,7 @@ export class AmbulanceListComponent {
   }
 
   async componentWillLoad() {
-    await this.refreshAmbulances();
+    this.ambulances = await this.getAmbulancesAsync();
   }
 
   render() {
@@ -45,26 +45,37 @@ export class AmbulanceListComponent {
         <div class="table-container">
           <table>
             <thead>
-              <tr>
-                <th>Ambulancia</th>
-                <th>Lekár</th>
-                <th>Štatistiky</th>
-              </tr>
+            <tr>
+              <th>Ambulancia</th>
+              <th>Lekár</th>
+              <th>Štatistiky</th>
+              <th></th>
+            </tr>
             </thead>
             <tbody>
-              {this.ambulances.map((ambulance) => (
-                <tr>
-                  <td>{ambulance.name}</td>
-                  <td>{ambulance.lekar}</td>
-                  <td>
-                    <button part="stats-button" onClick={() => console.log('Show stats for', ambulance.ambulanceId)}>
-                      Štatistiky
-                    </button>
-                  </td>
-                </tr>
-              ))}
+            {this.ambulances.map((ambulance) => (
+              <tr>
+                <td>{ambulance.name}</td>
+                <td>{ambulance.driverName}</td>
+                <td>
+                  <button part="stats-button" onClick={() => console.log('Show stats for', ambulance.id)}>
+                    Štatistiky
+                  </button>
+                </td>
+                <td>
+                  <md-filled-icon-button className="edit-button"
+                                         onClick={() => this.entryClicked.emit(ambulance.id)}>
+                    <md-icon>edit</md-icon>
+                  </md-filled-icon-button>
+                </td>
+              </tr>
+            ))}
             </tbody>
           </table>
+          <md-filled-icon-button className="add-button"
+                                 onclick={() => this.entryClicked.emit('@new')}>
+            <md-icon>add</md-icon>
+          </md-filled-icon-button>
           <button class="refresh-button" part="stats-button" onClick={() => this.refreshAmbulances()}>
             Obnoviť zoznam
           </button>

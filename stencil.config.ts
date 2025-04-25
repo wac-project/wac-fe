@@ -20,6 +20,7 @@ export const config: Config = {
       serviceWorker: null, // disable service workers
     },
   ],
+  globalScript: 'src/global/app.ts',
   testing: {
     browserHeadless: "shell",
   },

@@ -6,15 +6,58 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface AmbulanceEditorComponent {
+        "ambulanceId": string;
+        "apiBase": string;
+    }
     interface AmbulanceListComponent {
+        "apiBase": string;
     }
     interface AppComponent {
+        "apiBase": string;
+        "basePath": string;
     }
     interface HeaderNavComponent {
     }
 }
+export interface AmbulanceEditorComponentCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLAmbulanceEditorComponentElement;
+}
+export interface AmbulanceListComponentCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLAmbulanceListComponentElement;
+}
 declare global {
+    interface HTMLAmbulanceEditorComponentElementEventMap {
+        "editor-closed": string;
+    }
+    interface HTMLAmbulanceEditorComponentElement extends Components.AmbulanceEditorComponent, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLAmbulanceEditorComponentElementEventMap>(type: K, listener: (this: HTMLAmbulanceEditorComponentElement, ev: AmbulanceEditorComponentCustomEvent<HTMLAmbulanceEditorComponentElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLAmbulanceEditorComponentElementEventMap>(type: K, listener: (this: HTMLAmbulanceEditorComponentElement, ev: AmbulanceEditorComponentCustomEvent<HTMLAmbulanceEditorComponentElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLAmbulanceEditorComponentElement: {
+        prototype: HTMLAmbulanceEditorComponentElement;
+        new (): HTMLAmbulanceEditorComponentElement;
+    };
+    interface HTMLAmbulanceListComponentElementEventMap {
+        "entry-clicked": string;
+    }
     interface HTMLAmbulanceListComponentElement extends Components.AmbulanceListComponent, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLAmbulanceListComponentElementEventMap>(type: K, listener: (this: HTMLAmbulanceListComponentElement, ev: AmbulanceListComponentCustomEvent<HTMLAmbulanceListComponentElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLAmbulanceListComponentElementEventMap>(type: K, listener: (this: HTMLAmbulanceListComponentElement, ev: AmbulanceListComponentCustomEvent<HTMLAmbulanceListComponentElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLAmbulanceListComponentElement: {
         prototype: HTMLAmbulanceListComponentElement;
@@ -33,19 +76,30 @@ declare global {
         new (): HTMLHeaderNavComponentElement;
     };
     interface HTMLElementTagNameMap {
+        "ambulance-editor-component": HTMLAmbulanceEditorComponentElement;
         "ambulance-list-component": HTMLAmbulanceListComponentElement;
         "app-component": HTMLAppComponentElement;
         "header-nav-component": HTMLHeaderNavComponentElement;
     }
 }
 declare namespace LocalJSX {
+    interface AmbulanceEditorComponent {
+        "ambulanceId"?: string;
+        "apiBase"?: string;
+        "onEditor-closed"?: (event: AmbulanceEditorComponentCustomEvent<string>) => void;
+    }
     interface AmbulanceListComponent {
+        "apiBase"?: string;
+        "onEntry-clicked"?: (event: AmbulanceListComponentCustomEvent<string>) => void;
     }
     interface AppComponent {
+        "apiBase"?: string;
+        "basePath"?: string;
     }
     interface HeaderNavComponent {
     }
     interface IntrinsicElements {
+        "ambulance-editor-component": AmbulanceEditorComponent;
         "ambulance-list-component": AmbulanceListComponent;
         "app-component": AppComponent;
         "header-nav-component": HeaderNavComponent;
@@ -55,6 +109,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "ambulance-editor-component": LocalJSX.AmbulanceEditorComponent & JSXBase.HTMLAttributes<HTMLAmbulanceEditorComponentElement>;
             "ambulance-list-component": LocalJSX.AmbulanceListComponent & JSXBase.HTMLAttributes<HTMLAmbulanceListComponentElement>;
             "app-component": LocalJSX.AppComponent & JSXBase.HTMLAttributes<HTMLAppComponentElement>;
             "header-nav-component": LocalJSX.HeaderNavComponent & JSXBase.HTMLAttributes<HTMLHeaderNavComponentElement>;

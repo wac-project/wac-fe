@@ -14,7 +14,7 @@ export class HeaderNavComponent {
             <div class="brand">Informačný systém zdravotných výkonov</div>
             <nav class="menu">
               <ul>
-                <li><a href="/" class="nav-button">Ambulancie</a></li>
+                <li><a href="/ambulances" class="nav-button">Ambulancie</a></li>
                 <li><a href="/about" class="nav-button">Logout</a></li>
               </ul>
             </nav>
