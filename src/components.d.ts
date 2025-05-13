@@ -14,10 +14,33 @@ export namespace Components {
         "apiBase": string;
     }
     interface AppComponent {
+        /**
+          * Base URL for your API endpoints
+         */
         "apiBase": string;
-        "basePath": string;
     }
     interface HeaderNavComponent {
+    }
+    interface PaymentEditorComponent {
+        "apiBase": string;
+        "paymentId": string;
+    }
+    interface PaymentListComponent {
+        "apiBase": string;
+    }
+    interface ProcedureEditorComponent {
+        "apiBase": string;
+        "procedureId": string;
+    }
+    interface ProcedureListComponent {
+        /**
+          * If provided, only procedures for this ambulance are shown. Otherwise all procedures are listed.
+         */
+        "ambulanceId"?: string;
+        /**
+          * Base URL for your API endpoints
+         */
+        "apiBase": string;
     }
 }
 export interface AmbulanceEditorComponentCustomEvent<T> extends CustomEvent<T> {
@@ -27,6 +50,22 @@ export interface AmbulanceEditorComponentCustomEvent<T> extends CustomEvent<T> {
 export interface AmbulanceListComponentCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLAmbulanceListComponentElement;
+}
+export interface PaymentEditorComponentCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPaymentEditorComponentElement;
+}
+export interface PaymentListComponentCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPaymentListComponentElement;
+}
+export interface ProcedureEditorComponentCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLProcedureEditorComponentElement;
+}
+export interface ProcedureListComponentCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLProcedureListComponentElement;
 }
 declare global {
     interface HTMLAmbulanceEditorComponentElementEventMap {
@@ -48,6 +87,7 @@ declare global {
     };
     interface HTMLAmbulanceListComponentElementEventMap {
         "entry-clicked": string;
+        "view-procedures": string;
     }
     interface HTMLAmbulanceListComponentElement extends Components.AmbulanceListComponent, HTMLStencilElement {
         addEventListener<K extends keyof HTMLAmbulanceListComponentElementEventMap>(type: K, listener: (this: HTMLAmbulanceListComponentElement, ev: AmbulanceListComponentCustomEvent<HTMLAmbulanceListComponentElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -75,11 +115,83 @@ declare global {
         prototype: HTMLHeaderNavComponentElement;
         new (): HTMLHeaderNavComponentElement;
     };
+    interface HTMLPaymentEditorComponentElementEventMap {
+        "payment-editor-closed": string;
+    }
+    interface HTMLPaymentEditorComponentElement extends Components.PaymentEditorComponent, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPaymentEditorComponentElementEventMap>(type: K, listener: (this: HTMLPaymentEditorComponentElement, ev: PaymentEditorComponentCustomEvent<HTMLPaymentEditorComponentElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPaymentEditorComponentElementEventMap>(type: K, listener: (this: HTMLPaymentEditorComponentElement, ev: PaymentEditorComponentCustomEvent<HTMLPaymentEditorComponentElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPaymentEditorComponentElement: {
+        prototype: HTMLPaymentEditorComponentElement;
+        new (): HTMLPaymentEditorComponentElement;
+    };
+    interface HTMLPaymentListComponentElementEventMap {
+        "payment-clicked": string;
+    }
+    interface HTMLPaymentListComponentElement extends Components.PaymentListComponent, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPaymentListComponentElementEventMap>(type: K, listener: (this: HTMLPaymentListComponentElement, ev: PaymentListComponentCustomEvent<HTMLPaymentListComponentElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPaymentListComponentElementEventMap>(type: K, listener: (this: HTMLPaymentListComponentElement, ev: PaymentListComponentCustomEvent<HTMLPaymentListComponentElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPaymentListComponentElement: {
+        prototype: HTMLPaymentListComponentElement;
+        new (): HTMLPaymentListComponentElement;
+    };
+    interface HTMLProcedureEditorComponentElementEventMap {
+        "procedure-editor-closed": string;
+    }
+    interface HTMLProcedureEditorComponentElement extends Components.ProcedureEditorComponent, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLProcedureEditorComponentElementEventMap>(type: K, listener: (this: HTMLProcedureEditorComponentElement, ev: ProcedureEditorComponentCustomEvent<HTMLProcedureEditorComponentElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLProcedureEditorComponentElementEventMap>(type: K, listener: (this: HTMLProcedureEditorComponentElement, ev: ProcedureEditorComponentCustomEvent<HTMLProcedureEditorComponentElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLProcedureEditorComponentElement: {
+        prototype: HTMLProcedureEditorComponentElement;
+        new (): HTMLProcedureEditorComponentElement;
+    };
+    interface HTMLProcedureListComponentElementEventMap {
+        "procedure-clicked": string;
+    }
+    interface HTMLProcedureListComponentElement extends Components.ProcedureListComponent, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLProcedureListComponentElementEventMap>(type: K, listener: (this: HTMLProcedureListComponentElement, ev: ProcedureListComponentCustomEvent<HTMLProcedureListComponentElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLProcedureListComponentElementEventMap>(type: K, listener: (this: HTMLProcedureListComponentElement, ev: ProcedureListComponentCustomEvent<HTMLProcedureListComponentElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLProcedureListComponentElement: {
+        prototype: HTMLProcedureListComponentElement;
+        new (): HTMLProcedureListComponentElement;
+    };
     interface HTMLElementTagNameMap {
         "ambulance-editor-component": HTMLAmbulanceEditorComponentElement;
         "ambulance-list-component": HTMLAmbulanceListComponentElement;
         "app-component": HTMLAppComponentElement;
         "header-nav-component": HTMLHeaderNavComponentElement;
+        "payment-editor-component": HTMLPaymentEditorComponentElement;
+        "payment-list-component": HTMLPaymentListComponentElement;
+        "procedure-editor-component": HTMLProcedureEditorComponentElement;
+        "procedure-list-component": HTMLProcedureListComponentElement;
     }
 }
 declare namespace LocalJSX {
@@ -89,20 +201,61 @@ declare namespace LocalJSX {
         "onEditor-closed"?: (event: AmbulanceEditorComponentCustomEvent<string>) => void;
     }
     interface AmbulanceListComponent {
-        "apiBase"?: string;
+        "apiBase": string;
+        /**
+          * Emitted when clicking the edit/add icons
+         */
         "onEntry-clicked"?: (event: AmbulanceListComponentCustomEvent<string>) => void;
+        /**
+          * Emitted when clicking “View Procedures” on a row
+         */
+        "onView-procedures"?: (event: AmbulanceListComponentCustomEvent<string>) => void;
     }
     interface AppComponent {
-        "apiBase"?: string;
-        "basePath"?: string;
+        /**
+          * Base URL for your API endpoints
+         */
+        "apiBase": string;
     }
     interface HeaderNavComponent {
+    }
+    interface PaymentEditorComponent {
+        "apiBase": string;
+        "onPayment-editor-closed"?: (event: PaymentEditorComponentCustomEvent<string>) => void;
+        "paymentId": string;
+    }
+    interface PaymentListComponent {
+        "apiBase": string;
+        "onPayment-clicked"?: (event: PaymentListComponentCustomEvent<string>) => void;
+    }
+    interface ProcedureEditorComponent {
+        "apiBase": string;
+        "onProcedure-editor-closed"?: (event: ProcedureEditorComponentCustomEvent<string>) => void;
+        "procedureId": string;
+    }
+    interface ProcedureListComponent {
+        /**
+          * If provided, only procedures for this ambulance are shown. Otherwise all procedures are listed.
+         */
+        "ambulanceId"?: string;
+        /**
+          * Base URL for your API endpoints
+         */
+        "apiBase": string;
+        /**
+          * Emitted with the procedure ID or '@new'
+         */
+        "onProcedure-clicked"?: (event: ProcedureListComponentCustomEvent<string>) => void;
     }
     interface IntrinsicElements {
         "ambulance-editor-component": AmbulanceEditorComponent;
         "ambulance-list-component": AmbulanceListComponent;
         "app-component": AppComponent;
         "header-nav-component": HeaderNavComponent;
+        "payment-editor-component": PaymentEditorComponent;
+        "payment-list-component": PaymentListComponent;
+        "procedure-editor-component": ProcedureEditorComponent;
+        "procedure-list-component": ProcedureListComponent;
     }
 }
 export { LocalJSX as JSX };
@@ -113,6 +266,10 @@ declare module "@stencil/core" {
             "ambulance-list-component": LocalJSX.AmbulanceListComponent & JSXBase.HTMLAttributes<HTMLAmbulanceListComponentElement>;
             "app-component": LocalJSX.AppComponent & JSXBase.HTMLAttributes<HTMLAppComponentElement>;
             "header-nav-component": LocalJSX.HeaderNavComponent & JSXBase.HTMLAttributes<HTMLHeaderNavComponentElement>;
+            "payment-editor-component": LocalJSX.PaymentEditorComponent & JSXBase.HTMLAttributes<HTMLPaymentEditorComponentElement>;
+            "payment-list-component": LocalJSX.PaymentListComponent & JSXBase.HTMLAttributes<HTMLPaymentListComponentElement>;
+            "procedure-editor-component": LocalJSX.ProcedureEditorComponent & JSXBase.HTMLAttributes<HTMLProcedureEditorComponentElement>;
+            "procedure-list-component": LocalJSX.ProcedureListComponent & JSXBase.HTMLAttributes<HTMLProcedureListComponentElement>;
         }
     }
 }

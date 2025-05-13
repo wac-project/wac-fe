@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 apis/AmbulanceManagementApi.ts
 apis/PaymentManagementApi.ts
 apis/ProcedureManagementApi.ts

@@ -1,77 +1,166 @@
-import { Component, Host, Prop, State, h } from '@stencil/core';
-
-declare global {
-  interface Window {
-    navigation: any;
-  }
-}
+// src/components/app-component/app-component.tsx
+import { Component, Prop, State, h } from '@stencil/core';
 
 @Component({
   tag: 'app-component',
-  styleUrl: 'app-component',
-  shadow: true,
+  styleUrl: 'app-component.css',
+  shadow: false,
 })
 export class AppComponent {
-  @State() private relativePath = '';
+  /** Base URL for your API endpoints */
+  @Prop() apiBase!: string;
 
-  @Prop() basePath: string = '';
-  @Prop() apiBase: string;
+  /** Which view to render */
+  @State()
+  view:
+    | 'ambulances'
+    | 'editor'
+    | 'ambulance-procedures'
+    | 'procedures'
+    | 'procedure-editor'
+    | 'payments'
+    | 'payment-editor' = 'ambulances';
+
+  /** IDs for the entity being edited or viewed */
+  @State() ambulanceId: string = '';
+  @State() procedureId: string = '';
+  @State() paymentId: string = '';
 
   componentWillLoad() {
-    const baseUri = new URL(this.basePath, document.baseURI || '/').pathname;
-
-    const toRelative = (path: string) => {
-      if (path.startsWith(baseUri)) {
-        this.relativePath = path.slice(baseUri.length);
-      } else {
-        this.relativePath = '';
-      }
-    };
-
-    window.navigation?.addEventListener('navigate', (ev: Event) => {
-      if ((ev as any).canIntercept) {
-        (ev as any).intercept();
-      }
-      let path = new URL((ev as any).destination.url).pathname;
-      toRelative(path);
+    this.updateView(window.location.pathname);
+    window.addEventListener('popstate', () => {
+      this.updateView(window.location.pathname);
     });
+  }
 
-    toRelative(location.pathname);
+  private updateView(path: string) {
+    const parts = path.split('/').filter(p => p);
+    const [first, second, third] = parts;
+
+    // Drill into procedures for a specific ambulance
+    if (first === 'ambulances' && second && third === 'procedures') {
+      this.view = 'ambulance-procedures';
+      this.ambulanceId = second;
+      return;
+    }
+
+    switch (first) {
+  case 'entry':
+    this.view = 'editor';
+    this.ambulanceId = second || '';
+    break;
+
+  case 'procedures':
+    this.view = second ? 'procedure-editor' : 'procedures';
+    this.procedureId = second || '';
+    break;
+
+  case 'procedure': // OK
+    this.view = 'procedure-editor';
+    this.procedureId = second || '';
+    break;
+
+  case 'payments':
+    this.view = second ? 'payment-editor' : 'payments';
+    this.paymentId = second || '';
+    break;
+
+  case 'payment':
+    this.view = 'payment-editor';
+    this.paymentId = second || '';
+  break;
+
+  default:
+    this.view = 'ambulances';
+    break;
+}
+  }
+
+  private navigate(url: string) {
+    window.history.pushState({}, '', url);
+    this.updateView(window.location.pathname);
   }
 
   render() {
-    let element = 'ambulances';
-    let ambulanceId = '@new';
+    return (
+      <div class="app-container">
+        {/* Ambulances list with “View Procedures” button */}
+        {this.view === 'ambulances' && (
+          <ambulance-list-component
+            apiBase={this.apiBase}
+            onEntry-clicked={(ev: CustomEvent<string>) =>
+              this.navigate(`/entry/${ev.detail}`)
+            }
+            onView-procedures={(ev: CustomEvent<string>) =>
+              this.navigate(`/ambulances/${ev.detail}/procedures`)
+            }
+          />
+        )}
 
-    if (this.relativePath.startsWith('entry/')) {
-      element = 'editor';
-      ambulanceId = this.relativePath.split('/')[1];
-    }
+        {/* Ambulance editor */}
+        {this.view === 'editor' && (
+          <ambulance-editor-component
+            ambulanceId={this.ambulanceId}
+            apiBase={this.apiBase}
+            onEditor-closed={() => this.navigate('/ambulances')}
+          />
+        )}
 
-    const navigate = (path: string) => {
-      const absolute = new URL(path, new URL(this.basePath, document.baseURI)).pathname;
-      window.navigation.navigate(absolute);
-    };
+        {/* Procedures for a specific ambulance */}
+        {this.view === 'ambulance-procedures' && (
+          <procedure-list-component
+            apiBase={this.apiBase}
+            ambulanceId={this.ambulanceId}
+            onProcedure-clicked={(ev: CustomEvent<string>) =>
+              this.navigate(`/procedures/${ev.detail}`) // ✅ use plural
+            }
+          />
+        )}
 
-    switch (element) {
-      case 'ambulances':
-        return (
-          <Host>
-            <ambulance-list-component api-base={this.apiBase}
-                                      onentry-clicked={(ev: CustomEvent<string>) => navigate('./entry/' + ev.detail)}>
-            </ambulance-list-component>
-          </Host>
-        );
-      case 'editor':
-        return (
-          <Host>
-            <ambulance-editor-component ambulance-id={ambulanceId}
-                                        api-base={this.apiBase}
-                                        oneditor-closed={() => navigate('./list')}
-            ></ambulance-editor-component>
-          </Host>
-        );
-    }
 
+
+        {/* Global procedures list */}
+        {this.view === 'procedures' && (
+          <procedure-list-component
+            apiBase={this.apiBase}
+            onProcedure-clicked={(ev: CustomEvent<string>) =>
+              this.navigate(`/procedure/${ev.detail}`)
+            }
+          />
+        )}
+
+        {/* Procedure editor */}
+        {this.view === 'procedure-editor' && (
+          <procedure-editor-component
+            procedureId={this.procedureId}
+            apiBase={this.apiBase}
+            onProcedure-editor-closed={() =>
+              this.navigate('/procedures')
+            }
+          />
+        )}
+
+        {/* Global payments list */}
+        {this.view === 'payments' && (
+          <payment-list-component
+            apiBase={this.apiBase}
+            onPayment-clicked={(ev: CustomEvent<string>) =>
+              this.navigate(`/payment/${ev.detail}`) 
+            }
+          />
+        )}
+
+        {/* Payment editor */}
+        {this.view === 'payment-editor' && (
+          <payment-editor-component
+            paymentId={this.paymentId}
+            apiBase={this.apiBase}
+            onPayment-editor-closed={() =>
+              this.navigate('/payments')
+            }
+          />
+        )}
+      </div>
+    );
   }
 }

@@ -22,126 +22,254 @@ import {
     ProcedureToJSON,
 } from '../models/index';
 
-export interface CreateProcedureRequest {
+export interface ProceduresIdDeleteRequest {
+    id: string;
+}
+
+export interface ProceduresIdGetRequest {
+    id: string;
+}
+
+export interface ProceduresIdPutRequest {
+    id: string;
     procedure: Procedure;
 }
 
-export interface DeleteProcedureRequest {
-    procedureId: string;
-}
-
-export interface GetProcedureByIdRequest {
-    procedureId: string;
-}
-
-export interface UpdateProcedureRequest {
-    procedureId: string;
+export interface ProceduresPostRequest {
     procedure: Procedure;
 }
 
 /**
  * ProcedureManagementApi - interface
- *
+ * 
  * @export
  * @interface ProcedureManagementApiInterface
  */
 export interface ProcedureManagementApiInterface {
     /**
-     * Create a new procedure. An ambulance must be selected from the existing ambulances.
-     * @summary Create a new procedure
-     * @param {Procedure} procedure Procedure object to be created.
+     * 
+     * @summary List all procedures
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcedureManagementApiInterface
      */
-    createProcedureRaw(requestParameters: CreateProcedureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Procedure>>;
+    proceduresGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Procedure>>>;
 
     /**
-     * Create a new procedure. An ambulance must be selected from the existing ambulances.
-     * Create a new procedure
+     * List all procedures
      */
-    createProcedure(requestParameters: CreateProcedureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Procedure>;
+    proceduresGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Procedure>>;
 
     /**
-     * Delete a procedure.
+     * 
      * @summary Delete a procedure
-     * @param {string} procedureId Unique identifier of the procedure.
+     * @param {string} id Procedure identifier
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcedureManagementApiInterface
      */
-    deleteProcedureRaw(requestParameters: DeleteProcedureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    proceduresIdDeleteRaw(requestParameters: ProceduresIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
-     * Delete a procedure.
      * Delete a procedure
      */
-    deleteProcedure(requestParameters: DeleteProcedureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    proceduresIdDelete(requestParameters: ProceduresIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Retrieve details of a specific procedure.
-     * @summary Get procedure details
-     * @param {string} procedureId Unique identifier of the procedure.
+     * 
+     * @summary Get a single procedure by ID
+     * @param {string} id Procedure identifier
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcedureManagementApiInterface
      */
-    getProcedureByIdRaw(requestParameters: GetProcedureByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Procedure>>;
+    proceduresIdGetRaw(requestParameters: ProceduresIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Procedure>>;
 
     /**
-     * Retrieve details of a specific procedure.
-     * Get procedure details
+     * Get a single procedure by ID
      */
-    getProcedureById(requestParameters: GetProcedureByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Procedure>;
+    proceduresIdGet(requestParameters: ProceduresIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Procedure>;
 
     /**
-     * Retrieve a list of all procedures with details including patient, visit type, price, payer, and associated ambulance.
-     * @summary Get list of procedures
+     * 
+     * @summary Update an existing procedure
+     * @param {string} id Procedure identifier
+     * @param {Procedure} procedure 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcedureManagementApiInterface
      */
-    getProceduresRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Procedure>>>;
+    proceduresIdPutRaw(requestParameters: ProceduresIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Procedure>>;
 
     /**
-     * Retrieve a list of all procedures with details including patient, visit type, price, payer, and associated ambulance.
-     * Get list of procedures
+     * Update an existing procedure
      */
-    getProcedures(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Procedure>>;
+    proceduresIdPut(requestParameters: ProceduresIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Procedure>;
 
     /**
-     * Update an existing procedure.
-     * @summary Update procedure details
-     * @param {string} procedureId Unique identifier of the procedure.
-     * @param {Procedure} procedure Procedure object with updated information.
+     * 
+     * @summary Create a new procedure
+     * @param {Procedure} procedure 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ProcedureManagementApiInterface
      */
-    updateProcedureRaw(requestParameters: UpdateProcedureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Procedure>>;
+    proceduresPostRaw(requestParameters: ProceduresPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Procedure>>;
 
     /**
-     * Update an existing procedure.
-     * Update procedure details
+     * Create a new procedure
      */
-    updateProcedure(requestParameters: UpdateProcedureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Procedure>;
+    proceduresPost(requestParameters: ProceduresPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Procedure>;
 
 }
 
 /**
- *
+ * 
  */
 export class ProcedureManagementApi extends runtime.BaseAPI implements ProcedureManagementApiInterface {
 
     /**
-     * Create a new procedure. An ambulance must be selected from the existing ambulances.
-     * Create a new procedure
+     * List all procedures
      */
-    async createProcedureRaw(requestParameters: CreateProcedureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Procedure>> {
+    async proceduresGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Procedure>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/procedures`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProcedureFromJSON));
+    }
+
+    /**
+     * List all procedures
+     */
+    async proceduresGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Procedure>> {
+        const response = await this.proceduresGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Delete a procedure
+     */
+    async proceduresIdDeleteRaw(requestParameters: ProceduresIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling proceduresIdDelete().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/procedures/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete a procedure
+     */
+    async proceduresIdDelete(requestParameters: ProceduresIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.proceduresIdDeleteRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Get a single procedure by ID
+     */
+    async proceduresIdGetRaw(requestParameters: ProceduresIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Procedure>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling proceduresIdGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/procedures/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProcedureFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a single procedure by ID
+     */
+    async proceduresIdGet(requestParameters: ProceduresIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Procedure> {
+        const response = await this.proceduresIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update an existing procedure
+     */
+    async proceduresIdPutRaw(requestParameters: ProceduresIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Procedure>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling proceduresIdPut().'
+            );
+        }
+
         if (requestParameters['procedure'] == null) {
             throw new runtime.RequiredError(
                 'procedure',
-                'Required parameter "procedure" was null or undefined when calling createProcedure().'
+                'Required parameter "procedure" was null or undefined when calling proceduresIdPut().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/procedures/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ProcedureToJSON(requestParameters['procedure']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProcedureFromJSON(jsonValue));
+    }
+
+    /**
+     * Update an existing procedure
+     */
+    async proceduresIdPut(requestParameters: ProceduresIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Procedure> {
+        const response = await this.proceduresIdPutRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Create a new procedure
+     */
+    async proceduresPostRaw(requestParameters: ProceduresPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Procedure>> {
+        if (requestParameters['procedure'] == null) {
+            throw new runtime.RequiredError(
+                'procedure',
+                'Required parameter "procedure" was null or undefined when calling proceduresPost().'
             );
         }
 
@@ -163,153 +291,10 @@ export class ProcedureManagementApi extends runtime.BaseAPI implements Procedure
     }
 
     /**
-     * Create a new procedure. An ambulance must be selected from the existing ambulances.
      * Create a new procedure
      */
-    async createProcedure(requestParameters: CreateProcedureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Procedure> {
-        const response = await this.createProcedureRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Delete a procedure.
-     * Delete a procedure
-     */
-    async deleteProcedureRaw(requestParameters: DeleteProcedureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['procedureId'] == null) {
-            throw new runtime.RequiredError(
-                'procedureId',
-                'Required parameter "procedureId" was null or undefined when calling deleteProcedure().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/procedures/{procedureId}`.replace(`{${"procedureId"}}`, encodeURIComponent(String(requestParameters['procedureId']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Delete a procedure.
-     * Delete a procedure
-     */
-    async deleteProcedure(requestParameters: DeleteProcedureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteProcedureRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Retrieve details of a specific procedure.
-     * Get procedure details
-     */
-    async getProcedureByIdRaw(requestParameters: GetProcedureByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Procedure>> {
-        if (requestParameters['procedureId'] == null) {
-            throw new runtime.RequiredError(
-                'procedureId',
-                'Required parameter "procedureId" was null or undefined when calling getProcedureById().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/procedures/{procedureId}`.replace(`{${"procedureId"}}`, encodeURIComponent(String(requestParameters['procedureId']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProcedureFromJSON(jsonValue));
-    }
-
-    /**
-     * Retrieve details of a specific procedure.
-     * Get procedure details
-     */
-    async getProcedureById(requestParameters: GetProcedureByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Procedure> {
-        const response = await this.getProcedureByIdRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Retrieve a list of all procedures with details including patient, visit type, price, payer, and associated ambulance.
-     * Get list of procedures
-     */
-    async getProceduresRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Procedure>>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/procedures`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProcedureFromJSON));
-    }
-
-    /**
-     * Retrieve a list of all procedures with details including patient, visit type, price, payer, and associated ambulance.
-     * Get list of procedures
-     */
-    async getProcedures(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Procedure>> {
-        const response = await this.getProceduresRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Update an existing procedure.
-     * Update procedure details
-     */
-    async updateProcedureRaw(requestParameters: UpdateProcedureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Procedure>> {
-        if (requestParameters['procedureId'] == null) {
-            throw new runtime.RequiredError(
-                'procedureId',
-                'Required parameter "procedureId" was null or undefined when calling updateProcedure().'
-            );
-        }
-
-        if (requestParameters['procedure'] == null) {
-            throw new runtime.RequiredError(
-                'procedure',
-                'Required parameter "procedure" was null or undefined when calling updateProcedure().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/procedures/{procedureId}`.replace(`{${"procedureId"}}`, encodeURIComponent(String(requestParameters['procedureId']))),
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ProcedureToJSON(requestParameters['procedure']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProcedureFromJSON(jsonValue));
-    }
-
-    /**
-     * Update an existing procedure.
-     * Update procedure details
-     */
-    async updateProcedure(requestParameters: UpdateProcedureRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Procedure> {
-        const response = await this.updateProcedureRaw(requestParameters, initOverrides);
+    async proceduresPost(requestParameters: ProceduresPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Procedure> {
+        const response = await this.proceduresPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -12,10 +12,9 @@
  * Do not edit the class manually.
  */
 
-// @ts-ignore
 import { mapValues } from '../runtime';
 /**
- *
+ * 
  * @export
  * @interface Procedure
  */
@@ -27,13 +26,19 @@ export interface Procedure {
      */
     id: string;
     /**
+     * Detailed description of the procedure.
+     * @type {string}
+     * @memberof Procedure
+     */
+    description: string;
+    /**
      * Name or identifier of the patient.
      * @type {string}
      * @memberof Procedure
      */
     patient: string;
     /**
-     * Type of visit.
+     * Type of visit (e.g., emergency, checkup, follow-up).
      * @type {string}
      * @memberof Procedure
      */
@@ -56,6 +61,12 @@ export interface Procedure {
      * @memberof Procedure
      */
     ambulanceId: string;
+    /**
+     * Date and time of the procedure (ISO 8601 format).
+     * @type {Date}
+     * @memberof Procedure
+     */
+    timestamp?: Date;
 }
 
 /**
@@ -63,6 +74,7 @@ export interface Procedure {
  */
 export function instanceOfProcedure(value: object): value is Procedure {
     if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('description' in value) || value['description'] === undefined) return false;
     if (!('patient' in value) || value['patient'] === undefined) return false;
     if (!('visitType' in value) || value['visitType'] === undefined) return false;
     if (!('price' in value) || value['price'] === undefined) return false;
@@ -75,19 +87,20 @@ export function ProcedureFromJSON(json: any): Procedure {
     return ProcedureFromJSONTyped(json, false);
 }
 
-// @ts-ignore
 export function ProcedureFromJSONTyped(json: any, ignoreDiscriminator: boolean): Procedure {
     if (json == null) {
         return json;
     }
     return {
-
+        
         'id': json['id'],
+        'description': json['description'],
         'patient': json['patient'],
-        'visitType': json['visitType'],
+        'visitType': json['visit_type'],
         'price': json['price'],
         'payer': json['payer'],
-        'ambulanceId': json['ambulanceId'],
+        'ambulanceId': json['ambulance_id'],
+        'timestamp': json['timestamp'] == null ? undefined : (new Date(json['timestamp'])),
     };
 }
 
@@ -95,20 +108,21 @@ export function ProcedureToJSON(json: any): Procedure {
     return ProcedureToJSONTyped(json, false);
 }
 
-// @ts-ignore
 export function ProcedureToJSONTyped(value?: Procedure | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
-
+        
         'id': value['id'],
+        'description': value['description'],
         'patient': value['patient'],
-        'visitType': value['visitType'],
+        'visit_type': value['visitType'],
         'price': value['price'],
         'payer': value['payer'],
-        'ambulanceId': value['ambulanceId'],
+        'ambulance_id': value['ambulanceId'],
+        'timestamp': value['timestamp'] == null ? undefined : ((value['timestamp']).toISOString()),
     };
 }
 

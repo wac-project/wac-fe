@@ -12,10 +12,9 @@
  * Do not edit the class manually.
  */
 
-// @ts-ignore
 import { mapValues } from '../runtime';
 /**
- *
+ * 
  * @export
  * @interface Payment
  */
@@ -26,6 +25,12 @@ export interface Payment {
      * @memberof Payment
      */
     id: string;
+    /**
+     * Description of the payment record.
+     * @type {string}
+     * @memberof Payment
+     */
+    description?: string;
     /**
      * Identifier of the related procedure.
      * @type {string}
@@ -44,6 +49,12 @@ export interface Payment {
      * @memberof Payment
      */
     amount: number;
+    /**
+     * Date and time when the payment was made (ISO 8601 format).
+     * @type {Date}
+     * @memberof Payment
+     */
+    timestamp?: Date;
 }
 
 /**
@@ -61,17 +72,18 @@ export function PaymentFromJSON(json: any): Payment {
     return PaymentFromJSONTyped(json, false);
 }
 
-// @ts-ignore
 export function PaymentFromJSONTyped(json: any, ignoreDiscriminator: boolean): Payment {
     if (json == null) {
         return json;
     }
     return {
-
+        
         'id': json['id'],
-        'procedureId': json['procedureId'],
+        'description': json['description'] == null ? undefined : json['description'],
+        'procedureId': json['procedure_id'],
         'insurance': json['insurance'],
         'amount': json['amount'],
+        'timestamp': json['timestamp'] == null ? undefined : (new Date(json['timestamp'])),
     };
 }
 
@@ -79,18 +91,19 @@ export function PaymentToJSON(json: any): Payment {
     return PaymentToJSONTyped(json, false);
 }
 
-// @ts-ignore
 export function PaymentToJSONTyped(value?: Payment | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
-
+        
         'id': value['id'],
-        'procedureId': value['procedureId'],
+        'description': value['description'],
+        'procedure_id': value['procedureId'],
         'insurance': value['insurance'],
         'amount': value['amount'],
+        'timestamp': value['timestamp'] == null ? undefined : ((value['timestamp']).toISOString()),
     };
 }
 

@@ -22,126 +22,254 @@ import {
     PaymentToJSON,
 } from '../models/index';
 
-export interface CreatePaymentRequest {
+export interface PaymentsIdDeleteRequest {
+    id: string;
+}
+
+export interface PaymentsIdGetRequest {
+    id: string;
+}
+
+export interface PaymentsIdPutRequest {
+    id: string;
     payment: Payment;
 }
 
-export interface DeletePaymentRequest {
-    paymentId: string;
-}
-
-export interface GetPaymentByIdRequest {
-    paymentId: string;
-}
-
-export interface UpdatePaymentRequest {
-    paymentId: string;
+export interface PaymentsPostRequest {
     payment: Payment;
 }
 
 /**
  * PaymentManagementApi - interface
- *
+ * 
  * @export
  * @interface PaymentManagementApiInterface
  */
 export interface PaymentManagementApiInterface {
     /**
-     * Create a new payment record for a procedure.
-     * @summary Create a new payment record
-     * @param {Payment} payment Payment record to be created.
+     * 
+     * @summary List all payments
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PaymentManagementApiInterface
      */
-    createPaymentRaw(requestParameters: CreatePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Payment>>;
+    paymentsGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Payment>>>;
 
     /**
-     * Create a new payment record for a procedure.
-     * Create a new payment record
+     * List all payments
      */
-    createPayment(requestParameters: CreatePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Payment>;
+    paymentsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Payment>>;
 
     /**
-     * Delete a payment record.
-     * @summary Delete a payment record
-     * @param {string} paymentId Unique identifier of the payment record.
+     * 
+     * @summary Delete a payment
+     * @param {string} id Payment identifier
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PaymentManagementApiInterface
      */
-    deletePaymentRaw(requestParameters: DeletePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    paymentsIdDeleteRaw(requestParameters: PaymentsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
-     * Delete a payment record.
-     * Delete a payment record
+     * Delete a payment
      */
-    deletePayment(requestParameters: DeletePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    paymentsIdDelete(requestParameters: PaymentsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * Retrieve details of a specific payment record.
-     * @summary Get payment record details
-     * @param {string} paymentId Unique identifier of the payment record.
+     * 
+     * @summary Get a single payment by ID
+     * @param {string} id Payment identifier
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PaymentManagementApiInterface
      */
-    getPaymentByIdRaw(requestParameters: GetPaymentByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Payment>>;
+    paymentsIdGetRaw(requestParameters: PaymentsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Payment>>;
 
     /**
-     * Retrieve details of a specific payment record.
-     * Get payment record details
+     * Get a single payment by ID
      */
-    getPaymentById(requestParameters: GetPaymentByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Payment>;
+    paymentsIdGet(requestParameters: PaymentsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Payment>;
 
     /**
-     * Retrieve a list of all payment records for procedures.
-     * @summary Get list of payment records
+     * 
+     * @summary Update an existing payment
+     * @param {string} id Payment identifier
+     * @param {Payment} payment 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PaymentManagementApiInterface
      */
-    getPaymentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Payment>>>;
+    paymentsIdPutRaw(requestParameters: PaymentsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Payment>>;
 
     /**
-     * Retrieve a list of all payment records for procedures.
-     * Get list of payment records
+     * Update an existing payment
      */
-    getPayments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Payment>>;
+    paymentsIdPut(requestParameters: PaymentsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Payment>;
 
     /**
-     * Update an existing payment record.
-     * @summary Update payment record details
-     * @param {string} paymentId Unique identifier of the payment record.
-     * @param {Payment} payment Payment record object with updated information.
+     * 
+     * @summary Create a new payment
+     * @param {Payment} payment 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PaymentManagementApiInterface
      */
-    updatePaymentRaw(requestParameters: UpdatePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Payment>>;
+    paymentsPostRaw(requestParameters: PaymentsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Payment>>;
 
     /**
-     * Update an existing payment record.
-     * Update payment record details
+     * Create a new payment
      */
-    updatePayment(requestParameters: UpdatePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Payment>;
+    paymentsPost(requestParameters: PaymentsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Payment>;
 
 }
 
 /**
- *
+ * 
  */
 export class PaymentManagementApi extends runtime.BaseAPI implements PaymentManagementApiInterface {
 
     /**
-     * Create a new payment record for a procedure.
-     * Create a new payment record
+     * List all payments
      */
-    async createPaymentRaw(requestParameters: CreatePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Payment>> {
+    async paymentsGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Payment>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/payments`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(PaymentFromJSON));
+    }
+
+    /**
+     * List all payments
+     */
+    async paymentsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Payment>> {
+        const response = await this.paymentsGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Delete a payment
+     */
+    async paymentsIdDeleteRaw(requestParameters: PaymentsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling paymentsIdDelete().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/payments/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete a payment
+     */
+    async paymentsIdDelete(requestParameters: PaymentsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.paymentsIdDeleteRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Get a single payment by ID
+     */
+    async paymentsIdGetRaw(requestParameters: PaymentsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Payment>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling paymentsIdGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/payments/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaymentFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a single payment by ID
+     */
+    async paymentsIdGet(requestParameters: PaymentsIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Payment> {
+        const response = await this.paymentsIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update an existing payment
+     */
+    async paymentsIdPutRaw(requestParameters: PaymentsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Payment>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling paymentsIdPut().'
+            );
+        }
+
         if (requestParameters['payment'] == null) {
             throw new runtime.RequiredError(
                 'payment',
-                'Required parameter "payment" was null or undefined when calling createPayment().'
+                'Required parameter "payment" was null or undefined when calling paymentsIdPut().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/payments/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PaymentToJSON(requestParameters['payment']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaymentFromJSON(jsonValue));
+    }
+
+    /**
+     * Update an existing payment
+     */
+    async paymentsIdPut(requestParameters: PaymentsIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Payment> {
+        const response = await this.paymentsIdPutRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Create a new payment
+     */
+    async paymentsPostRaw(requestParameters: PaymentsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Payment>> {
+        if (requestParameters['payment'] == null) {
+            throw new runtime.RequiredError(
+                'payment',
+                'Required parameter "payment" was null or undefined when calling paymentsPost().'
             );
         }
 
@@ -163,153 +291,10 @@ export class PaymentManagementApi extends runtime.BaseAPI implements PaymentMana
     }
 
     /**
-     * Create a new payment record for a procedure.
-     * Create a new payment record
+     * Create a new payment
      */
-    async createPayment(requestParameters: CreatePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Payment> {
-        const response = await this.createPaymentRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Delete a payment record.
-     * Delete a payment record
-     */
-    async deletePaymentRaw(requestParameters: DeletePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['paymentId'] == null) {
-            throw new runtime.RequiredError(
-                'paymentId',
-                'Required parameter "paymentId" was null or undefined when calling deletePayment().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/payments/{paymentId}`.replace(`{${"paymentId"}}`, encodeURIComponent(String(requestParameters['paymentId']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Delete a payment record.
-     * Delete a payment record
-     */
-    async deletePayment(requestParameters: DeletePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deletePaymentRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Retrieve details of a specific payment record.
-     * Get payment record details
-     */
-    async getPaymentByIdRaw(requestParameters: GetPaymentByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Payment>> {
-        if (requestParameters['paymentId'] == null) {
-            throw new runtime.RequiredError(
-                'paymentId',
-                'Required parameter "paymentId" was null or undefined when calling getPaymentById().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/payments/{paymentId}`.replace(`{${"paymentId"}}`, encodeURIComponent(String(requestParameters['paymentId']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => PaymentFromJSON(jsonValue));
-    }
-
-    /**
-     * Retrieve details of a specific payment record.
-     * Get payment record details
-     */
-    async getPaymentById(requestParameters: GetPaymentByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Payment> {
-        const response = await this.getPaymentByIdRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Retrieve a list of all payment records for procedures.
-     * Get list of payment records
-     */
-    async getPaymentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Payment>>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/payments`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(PaymentFromJSON));
-    }
-
-    /**
-     * Retrieve a list of all payment records for procedures.
-     * Get list of payment records
-     */
-    async getPayments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Payment>> {
-        const response = await this.getPaymentsRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Update an existing payment record.
-     * Update payment record details
-     */
-    async updatePaymentRaw(requestParameters: UpdatePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Payment>> {
-        if (requestParameters['paymentId'] == null) {
-            throw new runtime.RequiredError(
-                'paymentId',
-                'Required parameter "paymentId" was null or undefined when calling updatePayment().'
-            );
-        }
-
-        if (requestParameters['payment'] == null) {
-            throw new runtime.RequiredError(
-                'payment',
-                'Required parameter "payment" was null or undefined when calling updatePayment().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/payments/{paymentId}`.replace(`{${"paymentId"}}`, encodeURIComponent(String(requestParameters['paymentId']))),
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: PaymentToJSON(requestParameters['payment']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => PaymentFromJSON(jsonValue));
-    }
-
-    /**
-     * Update an existing payment record.
-     * Update payment record details
-     */
-    async updatePayment(requestParameters: UpdatePaymentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Payment> {
-        const response = await this.updatePaymentRaw(requestParameters, initOverrides);
+    async paymentsPost(requestParameters: PaymentsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Payment> {
+        const response = await this.paymentsPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -12,10 +12,9 @@
  * Do not edit the class manually.
  */
 
-// @ts-ignore
 import { mapValues } from '../runtime';
 /**
- *
+ * 
  * @export
  * @interface Ambulance
  */
@@ -39,11 +38,23 @@ export interface Ambulance {
      */
     location: string;
     /**
-     * Name of the driver in charge.
+     * Department the ambulance belongs to.
      * @type {string}
      * @memberof Ambulance
      */
-    driverName: string;
+    department: string;
+    /**
+     * Capacity of the ambulance (number of patients it can serve).
+     * @type {number}
+     * @memberof Ambulance
+     */
+    capacity: number;
+    /**
+     * Current status of the ambulance (e.g., Available, Occupied).
+     * @type {string}
+     * @memberof Ambulance
+     */
+    status: string;
 }
 
 /**
@@ -53,7 +64,9 @@ export function instanceOfAmbulance(value: object): value is Ambulance {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('location' in value) || value['location'] === undefined) return false;
-    if (!('driverName' in value) || value['driverName'] === undefined) return false;
+    if (!('department' in value) || value['department'] === undefined) return false;
+    if (!('capacity' in value) || value['capacity'] === undefined) return false;
+    if (!('status' in value) || value['status'] === undefined) return false;
     return true;
 }
 
@@ -61,17 +74,18 @@ export function AmbulanceFromJSON(json: any): Ambulance {
     return AmbulanceFromJSONTyped(json, false);
 }
 
-// @ts-ignore
 export function AmbulanceFromJSONTyped(json: any, ignoreDiscriminator: boolean): Ambulance {
     if (json == null) {
         return json;
     }
     return {
-
+        
         'id': json['id'],
         'name': json['name'],
         'location': json['location'],
-        'driverName': json['driverName'],
+        'department': json['department'],
+        'capacity': json['capacity'],
+        'status': json['status'],
     };
 }
 
@@ -79,18 +93,19 @@ export function AmbulanceToJSON(json: any): Ambulance {
     return AmbulanceToJSONTyped(json, false);
 }
 
-// @ts-ignore
 export function AmbulanceToJSONTyped(value?: Ambulance | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
-
+        
         'id': value['id'],
         'name': value['name'],
         'location': value['location'],
-        'driverName': value['driverName'],
+        'department': value['department'],
+        'capacity': value['capacity'],
+        'status': value['status'],
     };
 }
 

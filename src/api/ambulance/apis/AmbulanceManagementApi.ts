@@ -17,90 +17,123 @@ import * as runtime from '../runtime';
 import type {
   Ambulance,
   GetAmbulanceSummary200Response,
+  Procedure,
 } from '../models/index';
 import {
     AmbulanceFromJSON,
     AmbulanceToJSON,
     GetAmbulanceSummary200ResponseFromJSON,
-// @ts-ignore
     GetAmbulanceSummary200ResponseToJSON,
+    ProcedureFromJSON,
+    ProcedureToJSON,
 } from '../models/index';
 
-export interface CreateAmbulanceRequest {
+export interface AmbulancesIdDeleteRequest {
+    id: string;
+}
+
+export interface AmbulancesIdGetRequest {
+    id: string;
+}
+
+export interface AmbulancesIdPutRequest {
+    id: string;
     ambulance: Ambulance;
 }
 
-export interface DeleteAmbulanceRequest {
-    ambulanceId: string;
-}
-
-export interface GetAmbulanceByIdRequest {
-    ambulanceId: string;
+export interface AmbulancesPostRequest {
+    ambulance: Ambulance;
 }
 
 export interface GetAmbulanceSummaryRequest {
     ambulanceId: string;
 }
 
-export interface UpdateAmbulanceRequest {
+export interface GetProceduresByAmbulanceRequest {
     ambulanceId: string;
-    ambulance: Ambulance;
 }
 
 /**
  * AmbulanceManagementApi - interface
- *
+ * 
  * @export
  * @interface AmbulanceManagementApiInterface
  */
 export interface AmbulanceManagementApiInterface {
     /**
-     * Create a new ambulance.
-     * @summary Create a new ambulance
-     * @param {Ambulance} ambulance Ambulance object that needs to be added to the system.
+     * 
+     * @summary List all ambulances
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AmbulanceManagementApiInterface
      */
-    createAmbulanceRaw(requestParameters: CreateAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Ambulance>>;
+    ambulancesGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Ambulance>>>;
 
     /**
-     * Create a new ambulance.
+     * List all ambulances
+     */
+    ambulancesGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Ambulance>>;
+
+    /**
+     * 
+     * @summary Delete an ambulance
+     * @param {string} id Ambulance identifier
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AmbulanceManagementApiInterface
+     */
+    ambulancesIdDeleteRaw(requestParameters: AmbulancesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Delete an ambulance
+     */
+    ambulancesIdDelete(requestParameters: AmbulancesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Get a single ambulance by ID
+     * @param {string} id Ambulance identifier
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AmbulanceManagementApiInterface
+     */
+    ambulancesIdGetRaw(requestParameters: AmbulancesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Ambulance>>;
+
+    /**
+     * Get a single ambulance by ID
+     */
+    ambulancesIdGet(requestParameters: AmbulancesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance>;
+
+    /**
+     * 
+     * @summary Update an existing ambulance
+     * @param {string} id Ambulance identifier
+     * @param {Ambulance} ambulance 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AmbulanceManagementApiInterface
+     */
+    ambulancesIdPutRaw(requestParameters: AmbulancesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Ambulance>>;
+
+    /**
+     * Update an existing ambulance
+     */
+    ambulancesIdPut(requestParameters: AmbulancesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance>;
+
+    /**
+     * 
+     * @summary Create a new ambulance
+     * @param {Ambulance} ambulance 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AmbulanceManagementApiInterface
+     */
+    ambulancesPostRaw(requestParameters: AmbulancesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Ambulance>>;
+
+    /**
      * Create a new ambulance
      */
-    createAmbulance(requestParameters: CreateAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance>;
-
-    /**
-     * Delete an ambulance and all procedures linked to it.
-     * @summary Delete an ambulance and its associated procedures
-     * @param {string} ambulanceId Unique identifier of the ambulance.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AmbulanceManagementApiInterface
-     */
-    deleteAmbulanceRaw(requestParameters: DeleteAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
-
-    /**
-     * Delete an ambulance and all procedures linked to it.
-     * Delete an ambulance and its associated procedures
-     */
-    deleteAmbulance(requestParameters: DeleteAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
-
-    /**
-     * Retrieve details of a specific ambulance including a summary of the total procedure costs.
-     * @summary Get ambulance details
-     * @param {string} ambulanceId Unique identifier of the ambulance.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AmbulanceManagementApiInterface
-     */
-    getAmbulanceByIdRaw(requestParameters: GetAmbulanceByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Ambulance>>;
-
-    /**
-     * Retrieve details of a specific ambulance including a summary of the total procedure costs.
-     * Get ambulance details
-     */
-    getAmbulanceById(requestParameters: GetAmbulanceByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance>;
+    ambulancesPost(requestParameters: AmbulancesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance>;
 
     /**
      * Retrieve the total sum of procedure costs for a specific ambulance.
@@ -119,53 +152,170 @@ export interface AmbulanceManagementApiInterface {
     getAmbulanceSummary(requestParameters: GetAmbulanceSummaryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAmbulanceSummary200Response>;
 
     /**
-     * Retrieve a list of all ambulances with details such as name, location, and driver\'s name.
-     * @summary Get list of ambulances
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AmbulanceManagementApiInterface
-     */
-    getAmbulancesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Ambulance>>>;
-
-    /**
-     * Retrieve a list of all ambulances with details such as name, location, and driver\'s name.
-     * Get list of ambulances
-     */
-    getAmbulances(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Ambulance>>;
-
-    /**
-     * Update information of an existing ambulance.
-     * @summary Update ambulance details
+     * Retrieve all procedures linked to a specific ambulance.
+     * @summary Get procedures for an ambulance
      * @param {string} ambulanceId Unique identifier of the ambulance.
-     * @param {Ambulance} ambulance Ambulance object with updated details.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AmbulanceManagementApiInterface
      */
-    updateAmbulanceRaw(requestParameters: UpdateAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Ambulance>>;
+    getProceduresByAmbulanceRaw(requestParameters: GetProceduresByAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Procedure>>>;
 
     /**
-     * Update information of an existing ambulance.
-     * Update ambulance details
+     * Retrieve all procedures linked to a specific ambulance.
+     * Get procedures for an ambulance
      */
-    updateAmbulance(requestParameters: UpdateAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance>;
+    getProceduresByAmbulance(requestParameters: GetProceduresByAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Procedure>>;
 
 }
 
 /**
- *
+ * 
  */
 export class AmbulanceManagementApi extends runtime.BaseAPI implements AmbulanceManagementApiInterface {
 
     /**
-     * Create a new ambulance.
-     * Create a new ambulance
+     * List all ambulances
      */
-    async createAmbulanceRaw(requestParameters: CreateAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Ambulance>> {
+    async ambulancesGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Ambulance>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/ambulances`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AmbulanceFromJSON));
+    }
+
+    /**
+     * List all ambulances
+     */
+    async ambulancesGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Ambulance>> {
+        const response = await this.ambulancesGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Delete an ambulance
+     */
+    async ambulancesIdDeleteRaw(requestParameters: AmbulancesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling ambulancesIdDelete().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/ambulances/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete an ambulance
+     */
+    async ambulancesIdDelete(requestParameters: AmbulancesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.ambulancesIdDeleteRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Get a single ambulance by ID
+     */
+    async ambulancesIdGetRaw(requestParameters: AmbulancesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Ambulance>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling ambulancesIdGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/ambulances/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AmbulanceFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a single ambulance by ID
+     */
+    async ambulancesIdGet(requestParameters: AmbulancesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance> {
+        const response = await this.ambulancesIdGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update an existing ambulance
+     */
+    async ambulancesIdPutRaw(requestParameters: AmbulancesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Ambulance>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling ambulancesIdPut().'
+            );
+        }
+
         if (requestParameters['ambulance'] == null) {
             throw new runtime.RequiredError(
                 'ambulance',
-                'Required parameter "ambulance" was null or undefined when calling createAmbulance().'
+                'Required parameter "ambulance" was null or undefined when calling ambulancesIdPut().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/ambulances/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AmbulanceToJSON(requestParameters['ambulance']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AmbulanceFromJSON(jsonValue));
+    }
+
+    /**
+     * Update an existing ambulance
+     */
+    async ambulancesIdPut(requestParameters: AmbulancesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance> {
+        const response = await this.ambulancesIdPutRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Create a new ambulance
+     */
+    async ambulancesPostRaw(requestParameters: AmbulancesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Ambulance>> {
+        if (requestParameters['ambulance'] == null) {
+            throw new runtime.RequiredError(
+                'ambulance',
+                'Required parameter "ambulance" was null or undefined when calling ambulancesPost().'
             );
         }
 
@@ -187,80 +337,10 @@ export class AmbulanceManagementApi extends runtime.BaseAPI implements Ambulance
     }
 
     /**
-     * Create a new ambulance.
      * Create a new ambulance
      */
-    async createAmbulance(requestParameters: CreateAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance> {
-        const response = await this.createAmbulanceRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Delete an ambulance and all procedures linked to it.
-     * Delete an ambulance and its associated procedures
-     */
-    async deleteAmbulanceRaw(requestParameters: DeleteAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['ambulanceId'] == null) {
-            throw new runtime.RequiredError(
-                'ambulanceId',
-                'Required parameter "ambulanceId" was null or undefined when calling deleteAmbulance().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/ambulances/{ambulanceId}`.replace(`{${"ambulanceId"}}`, encodeURIComponent(String(requestParameters['ambulanceId']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Delete an ambulance and all procedures linked to it.
-     * Delete an ambulance and its associated procedures
-     */
-    async deleteAmbulance(requestParameters: DeleteAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteAmbulanceRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * Retrieve details of a specific ambulance including a summary of the total procedure costs.
-     * Get ambulance details
-     */
-    async getAmbulanceByIdRaw(requestParameters: GetAmbulanceByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Ambulance>> {
-        if (requestParameters['ambulanceId'] == null) {
-            throw new runtime.RequiredError(
-                'ambulanceId',
-                'Required parameter "ambulanceId" was null or undefined when calling getAmbulanceById().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/ambulances/{ambulanceId}`.replace(`{${"ambulanceId"}}`, encodeURIComponent(String(requestParameters['ambulanceId']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AmbulanceFromJSON(jsonValue));
-    }
-
-    /**
-     * Retrieve details of a specific ambulance including a summary of the total procedure costs.
-     * Get ambulance details
-     */
-    async getAmbulanceById(requestParameters: GetAmbulanceByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance> {
-        const response = await this.getAmbulanceByIdRaw(requestParameters, initOverrides);
+    async ambulancesPost(requestParameters: AmbulancesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance> {
+        const response = await this.ambulancesPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -300,75 +380,37 @@ export class AmbulanceManagementApi extends runtime.BaseAPI implements Ambulance
     }
 
     /**
-     * Retrieve a list of all ambulances with details such as name, location, and driver\'s name.
-     * Get list of ambulances
+     * Retrieve all procedures linked to a specific ambulance.
+     * Get procedures for an ambulance
      */
-    async getAmbulancesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Ambulance>>> {
+    async getProceduresByAmbulanceRaw(requestParameters: GetProceduresByAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Procedure>>> {
+        if (requestParameters['ambulanceId'] == null) {
+            throw new runtime.RequiredError(
+                'ambulanceId',
+                'Required parameter "ambulanceId" was null or undefined when calling getProceduresByAmbulance().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/ambulances`,
+            path: `/ambulances/{ambulanceId}/procedures`.replace(`{${"ambulanceId"}}`, encodeURIComponent(String(requestParameters['ambulanceId']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AmbulanceFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ProcedureFromJSON));
     }
 
     /**
-     * Retrieve a list of all ambulances with details such as name, location, and driver\'s name.
-     * Get list of ambulances
+     * Retrieve all procedures linked to a specific ambulance.
+     * Get procedures for an ambulance
      */
-    async getAmbulances(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Ambulance>> {
-        const response = await this.getAmbulancesRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Update information of an existing ambulance.
-     * Update ambulance details
-     */
-    async updateAmbulanceRaw(requestParameters: UpdateAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Ambulance>> {
-        if (requestParameters['ambulanceId'] == null) {
-            throw new runtime.RequiredError(
-                'ambulanceId',
-                'Required parameter "ambulanceId" was null or undefined when calling updateAmbulance().'
-            );
-        }
-
-        if (requestParameters['ambulance'] == null) {
-            throw new runtime.RequiredError(
-                'ambulance',
-                'Required parameter "ambulance" was null or undefined when calling updateAmbulance().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/ambulances/{ambulanceId}`.replace(`{${"ambulanceId"}}`, encodeURIComponent(String(requestParameters['ambulanceId']))),
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: AmbulanceToJSON(requestParameters['ambulance']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AmbulanceFromJSON(jsonValue));
-    }
-
-    /**
-     * Update information of an existing ambulance.
-     * Update ambulance details
-     */
-    async updateAmbulance(requestParameters: UpdateAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance> {
-        const response = await this.updateAmbulanceRaw(requestParameters, initOverrides);
+    async getProceduresByAmbulance(requestParameters: GetProceduresByAmbulanceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Procedure>> {
+        const response = await this.getProceduresByAmbulanceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

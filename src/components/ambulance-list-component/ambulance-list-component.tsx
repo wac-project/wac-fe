@@ -1,5 +1,6 @@
-import { Component, Event, Host, h, Prop, State, EventEmitter } from '@stencil/core';
-import { Ambulance, AmbulanceManagementApi, Configuration, Procedure, ProcedureManagementApi } from '../../api/ambulance';
+// src/components/ambulance-list-component/ambulance-list-component.tsx
+import { Component, Event, EventEmitter, Host, h, Prop, State } from '@stencil/core';
+import { Ambulance, AmbulanceManagementApi, Configuration } from '../../api/ambulance';
 
 @Component({
   tag: 'ambulance-list-component',
@@ -7,175 +8,103 @@ import { Ambulance, AmbulanceManagementApi, Configuration, Procedure, ProcedureM
   shadow: true,
 })
 export class AmbulanceListComponent {
-  @Event({ eventName: 'entry-clicked' }) entryClicked: EventEmitter<string>;
-  @Prop() apiBase: string;
-  @State() errorMessage: string;
+  /** Emitted when clicking the edit/add icons */
+  @Event({ eventName: 'entry-clicked' }) entryClicked!: EventEmitter<string>;
+
+  /** Emitted when clicking “View Procedures” on a row */
+  @Event({ eventName: 'view-procedures' }) viewProcedures!: EventEmitter<string>;
+
+  @Prop() apiBase!: string;
+
   @State() ambulances: Ambulance[] = [];
-  @State() procedures: Procedure[] = [];
-  @State() selectedAmbulanceId: string | null = null;
+  @State() isLoading = false;
+  @State() errorMessage = '';
 
-  private async getAmbulancesAsync(): Promise<Ambulance[]> {
-    try {
-      const configuration = new Configuration({
-        basePath: this.apiBase,
-      });
-
-      const ambulanceApi = new AmbulanceManagementApi(configuration);
-      const response = await ambulanceApi.getAmbulancesRaw();
-      if (response.raw.status < 299) {
-        return await response.value();
-      } else {
-        this.errorMessage = `Cannot retrieve list of ambulances: ${response.raw.statusText}`;
-      }
-    } catch (err: any) {
-      this.errorMessage = `Cannot retrieve list of ambulances: ${err.message || 'unknown'}`;
-    }
-    return [];
-  }
-
-  private async getProceduresAsync(ambulanceId: string): Promise<Procedure[]> {
-    try {
-      const configuration = new Configuration({
-        basePath: this.apiBase,
-      });
-
-      const procedureApi = new ProcedureManagementApi(configuration); // Use ProcedureManagementApi
-      const response = await procedureApi.getProceduresRaw(); // Correct method call
-      if (response.raw.status < 299) {
-        const procedures = await response.value();
-        // Filter procedures by ambulanceId (client-side)
-        return procedures.filter((procedure) => procedure.ambulanceId === ambulanceId);
-      } else {
-        this.errorMessage = `Cannot retrieve list of procedures: ${response.raw.statusText}`;
-      }
-    } catch (err: any) {
-      this.errorMessage = `Cannot retrieve list of procedures: ${err.message || 'unknown'}`;
-    }
-    return [];
-  }
-
-  private async refreshAmbulances() {
-    this.ambulances = await this.getAmbulancesAsync();
-  }
-
-  private async showProcedures(ambulanceId: string) {
-    this.selectedAmbulanceId = ambulanceId;
-    this.procedures = await this.getProceduresAsync(ambulanceId);
-  }
-
-  private goBack() {
-    this.selectedAmbulanceId = null;
-    this.procedures = [];
+  private get apiClient(): AmbulanceManagementApi {
+    return new AmbulanceManagementApi(new Configuration({ basePath: this.apiBase }));
   }
 
   async componentWillLoad() {
-    this.ambulances = await this.getAmbulancesAsync();
+    await this.fetchAmbulances();
   }
+
+  private async fetchAmbulances() {
+    this.isLoading = true;
+    this.errorMessage = '';
+    try {
+      const resp = await this.apiClient.ambulancesGetRaw();
+      if (!resp.raw.ok) {
+        throw new Error(resp.raw.statusText || 'Unknown error');
+      }
+      this.ambulances = await resp.value();
+    } catch (err: any) {
+      this.errorMessage = `Unable to load ambulances: ${err.message}`;
+      this.ambulances = [];
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  private onRefresh = () => this.fetchAmbulances();
+  private onAddNew = () => this.entryClicked.emit('@new');
+  private onEdit = (id: string) => () => this.entryClicked.emit(id);
+  private onStats = (id: string) => () => console.log('Stats for', id);
+
+  /** Emit with the ambulance ID to show its procedures */
+  private onViewProcedures = (id: string) => () => this.viewProcedures.emit(id);
 
   render() {
     return (
       <Host>
-        <div class="table-container">
-          {this.selectedAmbulanceId ? (
-            <>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Pacient</th>
-                    <th>Typ návštevy</th>
-                    <th>Cena</th>
-                    <th>Platca</th>
-                    <th></th>
+        {this.errorMessage && <div class="error">{this.errorMessage}</div>}
+        {this.isLoading ? (
+          <div class="loading-spinner">Loading...</div>
+        ) : (
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Location</th>
+                  <th>Department</th>
+                  <th>Capacity</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.ambulances.map(a => (
+                  <tr key={a.id}>
+                    <td>{a.name}</td>
+                    <td>{a.location}</td>
+                    <td>{a.department}</td>
+                    <td>{a.capacity}</td>
+                    <td>{a.status}</td>
+                    <td class="actions-cell">
+                      {/* New “View Procedures” button */}
+                      <button class="proc-btn" onClick={this.onViewProcedures(a.id)}>
+                        View Procedures
+                      </button>
+                      <button class="stats-btn" onClick={this.onStats(a.id)}>
+                        Summary
+                      </button>
+                      <md-filled-icon-button class="icon-btn" onClick={this.onEdit(a.id)}>
+                        <md-icon>edit</md-icon>
+                      </md-filled-icon-button>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {this.procedures.length > 0 ? (
-                    this.procedures.map((procedure) => (
-                      <tr>
-                        <td>{procedure.patient}</td>
-                        <td>{procedure.visitType}</td>
-                        <td>{procedure.price}</td>
-                        <td>{procedure.payer}</td>
-                        <td>
-                          <md-filled-icon-button
-                            className="edit-button"
-                            onClick={() => this.entryClicked.emit(procedure.id)}
-                          >
-                            <md-icon>edit</md-icon>
-                          </md-filled-icon-button>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={5}>Žiadne výkony pre túto ambulanciu.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-              <md-filled-icon-button
-                className="add-button"
-                onClick={() => this.entryClicked.emit('@new')}
-              >
+                ))}
+              </tbody>
+            </table>
+            <div class="actions-bar">
+
+              <button class="refresh-btn" onClick={this.onRefresh}>Refresh List</button>
+              <md-filled-icon-button class="icon-btn" onClick={this.onAddNew}>
                 <md-icon>add</md-icon>
               </md-filled-icon-button>
-              <button class="refresh-button" part="stats-button" onClick={() => this.goBack()}>
-                Späť
-              </button>
-            </>
-          ) : (
-            <>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Ambulancia</th>
-                    <th>Lekár</th>
-                    <th>Vykony</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.ambulances.map((ambulance) => (
-                    <tr>
-                      <td>{ambulance.name}</td>
-                      <td>{ambulance.driverName}</td>
-                      <td>
-                        <button
-                          part="stats-button"
-                          onClick={() => this.showProcedures(ambulance.id)}
-                        >
-                          Vykony
-                        </button>
-                      </td>
-                      <td>
-                        <md-filled-icon-button
-                          className="edit-button"
-                          onClick={() => this.entryClicked.emit(ambulance.id)}
-                        >
-                          <md-icon>edit</md-icon>
-                        </md-filled-icon-button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <md-filled-icon-button
-                className="add-button"
-                onClick={() => this.entryClicked.emit('@new')}
-              >
-                <md-icon>add</md-icon>
-              </md-filled-icon-button>
-              <button
-                class="refresh-button"
-                part="stats-button"
-                onClick={() => this.refreshAmbulances()}
-              >
-                Obnoviť zoznam
-              </button>
-            </>
-          )}
-          {this.errorMessage && <div class="error-message">{this.errorMessage}</div>}
-        </div>
+            </div>
+          </div>
+        )}
       </Host>
     );
   }

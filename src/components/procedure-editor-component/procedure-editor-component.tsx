@@ -1,66 +1,68 @@
 import { Component, Host, h, EventEmitter, Event, Prop, State } from '@stencil/core';
-import { Ambulance, AmbulanceManagementApi, Configuration } from '../../api/ambulance';
+import { Procedure, ProcedureManagementApi, Configuration } from '../../api/ambulance';
 
 @Component({
-  tag: 'ambulance-editor-component',
-  styleUrl: 'ambulance-editor-component.css',
+  tag: 'procedure-editor-component',
+  styleUrl: 'procedure-editor-component.css',
   shadow: true,
 })
-export class AmbulanceEditorComponent {
-  @Prop() ambulanceId: string;
-  @Prop() apiBase: string;
+export class ProcedureEditorComponent {
+  @Prop() procedureId!: string;
+  @Prop() apiBase!: string;
 
-  @Event({ eventName: 'editor-closed' }) editorClosed: EventEmitter<string>;
+  @Event({ eventName: 'procedure-editor-closed' }) editorClosed!: EventEmitter<string>;
 
-  @State() entry!: Ambulance;
+  @State() entry!: Procedure;
   @State() errorMessage = '';
   @State() isValid = false;
 
   private formElement!: HTMLFormElement;
-  private statuses = ['Dostupná', 'Occupied', 'Maintenance'];
 
   async componentWillLoad() {
-    await this.loadAmbulance();
+    await this.loadProcedure();
   }
 
-  private async loadAmbulance() {
+  private async loadProcedure() {
     this.errorMessage = '';
-    if (this.ambulanceId === '@new') {
+
+    if (this.procedureId === '@new') {
       this.entry = {
         id: '@new',
-        name: '',
-        location: '',
-        department: '',
-        capacity: 1,
-        status: this.statuses[0],
+        description: '',
+        patient: '',
+        price: 0,
+        visitType: '',
+        payer: '',
+        ambulanceId: '',
       };
       this.isValid = false;
       return;
     }
-    if (!this.ambulanceId) {
-      this.errorMessage = 'No ambulance ID provided';
+
+    if (!this.procedureId) {
+      this.errorMessage = 'No procedure ID provided';
       this.isValid = false;
       return;
     }
 
     try {
-      const api = new AmbulanceManagementApi(
+      const api = new ProcedureManagementApi(
         new Configuration({ basePath: this.apiBase })
       );
-      this.entry = await api.ambulancesIdGet({ id: this.ambulanceId });
+      this.entry = await api.proceduresIdGet({ id: this.procedureId });
       this.isValid = true;
     } catch (err: any) {
-      this.errorMessage = `Error loading ambulance: ${err.message || 'unknown'}`;
+      this.errorMessage = `Error loading procedure: ${err.message || 'unknown'}`;
       this.isValid = false;
     }
   }
 
   private handleInput(ev: Event) {
-    const tgt = ev.target as HTMLInputElement | HTMLSelectElement;
+    const tgt = ev.target as HTMLInputElement;
     const { name, value } = tgt;
 
-    if (name === 'capacity') {
-      this.entry.capacity = parseInt(value, 10) || 1;
+    if (name === 'price') {
+      this.entry.price = parseFloat(value) || 0;
     } else {
       // @ts-ignore
       this.entry[name] = value;
@@ -72,17 +74,17 @@ export class AmbulanceEditorComponent {
   private async save() {
     this.errorMessage = '';
     try {
-      const api = new AmbulanceManagementApi(
+      const api = new ProcedureManagementApi(
         new Configuration({ basePath: this.apiBase })
       );
-      if (this.ambulanceId === '@new') {
-        // Create new ambulance, stripping out `id` so server assigns one
+
+      if (this.procedureId === '@new') {
         const { id, ...createPayload } = this.entry;
-        // Cast to any to satisfy generated API signature
-        await api.ambulancesPost({ ambulance: createPayload as any });
+        await api.proceduresPost({ procedure: createPayload as any });
       } else {
-        await api.ambulancesIdPut({ id: this.ambulanceId, ambulance: this.entry });
+        await api.proceduresIdPut({ id: this.procedureId, procedure: this.entry });
       }
+
       this.editorClosed.emit('store');
     } catch (err: any) {
       this.errorMessage = `Save error: ${err.message || 'unknown'}`;
@@ -92,10 +94,10 @@ export class AmbulanceEditorComponent {
   private async deleteEntry() {
     this.errorMessage = '';
     try {
-      const api = new AmbulanceManagementApi(
+      const api = new ProcedureManagementApi(
         new Configuration({ basePath: this.apiBase })
       );
-      await api.ambulancesIdDelete({ id: this.ambulanceId });
+      await api.proceduresIdDelete({ id: this.procedureId });
       this.editorClosed.emit('delete');
     } catch (err: any) {
       this.errorMessage = `Delete error: ${err.message || 'unknown'}`;
@@ -110,7 +112,6 @@ export class AmbulanceEditorComponent {
         </Host>
       );
     }
-
     if (!this.entry) {
       return (
         <Host>
@@ -124,69 +125,68 @@ export class AmbulanceEditorComponent {
         <div class="form-container">
         <form ref={el => (this.formElement = el as HTMLFormElement)}>
           <md-filled-text-field
-            name="name"
-            label="Názov ambulancie"
+            name="description"
+            label="Popis výkonu"
             required
-            value={this.entry.name}
+            value={this.entry.description}
             onInput={ev => this.handleInput(ev)}
           />
-
           <md-filled-text-field
-            name="location"
-            label="Adresa"
+            name="patient"
+            label="Pacient"
             required
-            value={this.entry.location}
+            value={this.entry.patient}
             onInput={ev => this.handleInput(ev)}
           />
-
           <md-filled-text-field
-            name="department"
-            label="Oddelenie"
-            required
-            value={this.entry.department}
-            onInput={ev => this.handleInput(ev)}
-          />
-
-          <md-filled-text-field
-            name="capacity"
-            label="Kapacita"
+            name="price"
+            label="Cena"
             type="number"
-            min="1"
+            min="0"
+            step="0.01"
             required
-            value={String(this.entry.capacity)}
+            value={String(this.entry.price)}
             onInput={ev => this.handleInput(ev)}
           />
-
-
           <md-filled-text-field
-            name="status"
-            label="Status ambulancie"
+            name="visitType"
+            label="Typ návštevy"
             required
-            value={this.entry.status}
+            value={this.entry.visitType}
             onInput={ev => this.handleInput(ev)}
           />
-
-
+          <md-filled-text-field
+            name="payer"
+            label="Plátca"
+            required
+            value={this.entry.payer}
+            onInput={ev => this.handleInput(ev)}
+          />
+          <md-filled-text-field
+            name="ambulanceId"
+            label="ID Ambulancie"
+            required
+            value={this.entry.ambulanceId}
+            onInput={ev => this.handleInput(ev)}
+          />
         </form>
+        
 
         <md-divider inset />
 
         <div class="actions">
           <md-filled-tonal-button
             id="delete"
-            disabled={this.ambulanceId === '@new'}
+            disabled={this.procedureId === '@new'}
             onClick={() => this.deleteEntry()}
           >
             <md-icon slot="icon">delete</md-icon>
             Zmazať
           </md-filled-tonal-button>
-
           <span class="stretch-fill" />
-
           <md-outlined-button id="cancel" onClick={() => this.editorClosed.emit('cancel')}>
             Zrušiť
           </md-outlined-button>
-
           <md-filled-button
             id="confirm"
             disabled={!this.isValid}

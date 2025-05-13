@@ -25,6 +25,11 @@
   font-size: 0.875rem;
 }
 
+.name-container {
+  font-size: 1rem;
+  padding-left: 1rem;
+}
+
 .loading-spinner {
   font-size: 1rem;
   color: var(--primary);
