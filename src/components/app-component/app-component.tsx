@@ -84,6 +84,7 @@ export class AppComponent {
   render() {
     return (
       <div class="app-container">
+        <header-nav-component></header-nav-component>
         {/* Ambulances list with “View Procedures” button */}
         {this.view === 'ambulances' && (
           <ambulance-list-component
@@ -118,7 +119,6 @@ export class AppComponent {
         )}
 
 
-
         {/* Global procedures list */}
         {this.view === 'procedures' && (
           <procedure-list-component
@@ -145,7 +145,7 @@ export class AppComponent {
           <payment-list-component
             apiBase={this.apiBase}
             onPayment-clicked={(ev: CustomEvent<string>) =>
-              this.navigate(`/payment/${ev.detail}`) 
+              this.navigate(`/payment/${ev.detail}`)
             }
           />
         )}
