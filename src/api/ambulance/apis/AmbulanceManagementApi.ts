@@ -23,8 +23,10 @@ import {
     AmbulanceFromJSON,
     AmbulanceToJSON,
     GetAmbulanceSummary200ResponseFromJSON,
+// @ts-ignore
     GetAmbulanceSummary200ResponseToJSON,
     ProcedureFromJSON,
+// @ts-ignore
     ProcedureToJSON,
 } from '../models/index';
 
@@ -55,13 +57,13 @@ export interface GetProceduresByAmbulanceRequest {
 
 /**
  * AmbulanceManagementApi - interface
- * 
+ *
  * @export
  * @interface AmbulanceManagementApiInterface
  */
 export interface AmbulanceManagementApiInterface {
     /**
-     * 
+     *
      * @summary List all ambulances
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -75,7 +77,7 @@ export interface AmbulanceManagementApiInterface {
     ambulancesGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Ambulance>>;
 
     /**
-     * 
+     *
      * @summary Delete an ambulance
      * @param {string} id Ambulance identifier
      * @param {*} [options] Override http request option.
@@ -90,7 +92,7 @@ export interface AmbulanceManagementApiInterface {
     ambulancesIdDelete(requestParameters: AmbulancesIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
-     * 
+     *
      * @summary Get a single ambulance by ID
      * @param {string} id Ambulance identifier
      * @param {*} [options] Override http request option.
@@ -105,10 +107,10 @@ export interface AmbulanceManagementApiInterface {
     ambulancesIdGet(requestParameters: AmbulancesIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance>;
 
     /**
-     * 
+     *
      * @summary Update an existing ambulance
      * @param {string} id Ambulance identifier
-     * @param {Ambulance} ambulance 
+     * @param {Ambulance} ambulance
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AmbulanceManagementApiInterface
@@ -121,9 +123,9 @@ export interface AmbulanceManagementApiInterface {
     ambulancesIdPut(requestParameters: AmbulancesIdPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Ambulance>;
 
     /**
-     * 
+     *
      * @summary Create a new ambulance
-     * @param {Ambulance} ambulance 
+     * @param {Ambulance} ambulance
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AmbulanceManagementApiInterface
@@ -170,7 +172,7 @@ export interface AmbulanceManagementApiInterface {
 }
 
 /**
- * 
+ *
  */
 export class AmbulanceManagementApi extends runtime.BaseAPI implements AmbulanceManagementApiInterface {
 

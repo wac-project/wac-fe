@@ -12,9 +12,8 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
 /**
- * 
+ *
  * @export
  * @interface Ambulance
  */
@@ -74,12 +73,13 @@ export function AmbulanceFromJSON(json: any): Ambulance {
     return AmbulanceFromJSONTyped(json, false);
 }
 
+// @ts-ignore
 export function AmbulanceFromJSONTyped(json: any, ignoreDiscriminator: boolean): Ambulance {
     if (json == null) {
         return json;
     }
     return {
-        
+
         'id': json['id'],
         'name': json['name'],
         'location': json['location'],
@@ -93,13 +93,14 @@ export function AmbulanceToJSON(json: any): Ambulance {
     return AmbulanceToJSONTyped(json, false);
 }
 
+// @ts-ignore
 export function AmbulanceToJSONTyped(value?: Ambulance | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
-        
+
         'id': value['id'],
         'name': value['name'],
         'location': value['location'],

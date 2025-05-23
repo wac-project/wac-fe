@@ -12,15 +12,16 @@
  * Do not edit the class manually.
  */
 
+// @ts-ignore
 import { mapValues } from '../runtime';
 /**
- * 
+ *
  * @export
  * @interface GetAmbulanceSummary200Response
  */
 export interface GetAmbulanceSummary200Response {
     /**
-     * 
+     *
      * @type {number}
      * @memberof GetAmbulanceSummary200Response
      */
@@ -30,6 +31,7 @@ export interface GetAmbulanceSummary200Response {
 /**
  * Check if a given object implements the GetAmbulanceSummary200Response interface.
  */
+// @ts-ignore
 export function instanceOfGetAmbulanceSummary200Response(value: object): value is GetAmbulanceSummary200Response {
     return true;
 }
@@ -38,12 +40,13 @@ export function GetAmbulanceSummary200ResponseFromJSON(json: any): GetAmbulanceS
     return GetAmbulanceSummary200ResponseFromJSONTyped(json, false);
 }
 
+// @ts-ignore
 export function GetAmbulanceSummary200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): GetAmbulanceSummary200Response {
     if (json == null) {
         return json;
     }
     return {
-        
+
         'totalCost': json['totalCost'] == null ? undefined : json['totalCost'],
     };
 }
@@ -52,13 +55,14 @@ export function GetAmbulanceSummary200ResponseToJSON(json: any): GetAmbulanceSum
     return GetAmbulanceSummary200ResponseToJSONTyped(json, false);
 }
 
+// @ts-ignore
 export function GetAmbulanceSummary200ResponseToJSONTyped(value?: GetAmbulanceSummary200Response | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
-        
+
         'totalCost': value['totalCost'],
     };
 }

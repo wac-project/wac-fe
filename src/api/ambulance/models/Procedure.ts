@@ -12,9 +12,10 @@
  * Do not edit the class manually.
  */
 
+// @ts-ignore
 import { mapValues } from '../runtime';
 /**
- * 
+ *
  * @export
  * @interface Procedure
  */
@@ -87,12 +88,13 @@ export function ProcedureFromJSON(json: any): Procedure {
     return ProcedureFromJSONTyped(json, false);
 }
 
+// @ts-ignore
 export function ProcedureFromJSONTyped(json: any, ignoreDiscriminator: boolean): Procedure {
     if (json == null) {
         return json;
     }
     return {
-        
+
         'id': json['id'],
         'description': json['description'],
         'patient': json['patient'],
@@ -108,13 +110,14 @@ export function ProcedureToJSON(json: any): Procedure {
     return ProcedureToJSONTyped(json, false);
 }
 
+// @ts-ignore
 export function ProcedureToJSONTyped(value?: Procedure | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
-        
+
         'id': value['id'],
         'description': value['description'],
         'patient': value['patient'],

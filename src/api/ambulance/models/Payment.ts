@@ -12,9 +12,10 @@
  * Do not edit the class manually.
  */
 
+// @ts-ignore
 import { mapValues } from '../runtime';
 /**
- * 
+ *
  * @export
  * @interface Payment
  */
@@ -72,12 +73,13 @@ export function PaymentFromJSON(json: any): Payment {
     return PaymentFromJSONTyped(json, false);
 }
 
+// @ts-ignore
 export function PaymentFromJSONTyped(json: any, ignoreDiscriminator: boolean): Payment {
     if (json == null) {
         return json;
     }
     return {
-        
+
         'id': json['id'],
         'description': json['description'] == null ? undefined : json['description'],
         'procedureId': json['procedure_id'],
@@ -91,13 +93,14 @@ export function PaymentToJSON(json: any): Payment {
     return PaymentToJSONTyped(json, false);
 }
 
+// @ts-ignore
 export function PaymentToJSONTyped(value?: Payment | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
-        
+
         'id': value['id'],
         'description': value['description'],
         'procedure_id': value['procedureId'],
