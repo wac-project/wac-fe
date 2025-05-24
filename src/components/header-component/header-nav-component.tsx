@@ -1,5 +1,5 @@
 // src/components/header-component/header-nav-component.tsx
-import { Component, Host, h } from '@stencil/core';
+import { Component, Host, h, Prop } from '@stencil/core';
 
 @Component({
   tag: 'header-nav-component',
@@ -7,9 +7,12 @@ import { Component, Host, h } from '@stencil/core';
   shadow: true,
 })
 export class HeaderNavComponent {
+  @Prop() basePath: string = '';
+
   private navigate(path: string) {
+    const absolute = new URL(path, new URL(this.basePath, document.baseURI)).pathname;
     // pushState so AppComponent sees it
-    window.history.pushState({}, '', path);
+    window.history.pushState({}, '', absolute);
     // dispatch a popstate so AppComponent.updateView() runs
     window.dispatchEvent(new PopStateEvent('popstate'));
   }
@@ -24,11 +27,11 @@ export class HeaderNavComponent {
               <ul>
                 <li>
                   <a
-                    href="/ambulances"
+                    // href="/ambulances"
                     class="nav-button"
                     onClick={e => {
                       e.preventDefault();
-                      this.navigate('/ambulances');
+                      this.navigate('./ambulances');
                     }}
                   >
                     Ambulancie
@@ -36,11 +39,11 @@ export class HeaderNavComponent {
                 </li>
                 <li>
                   <a
-                    href="/payments"
+                    // href="/payments"
                     class="nav-button"
                     onClick={e => {
                       e.preventDefault();
-                      this.navigate('/payments');
+                      this.navigate('./payments');
                     }}
                   >
                     Payments
@@ -48,11 +51,11 @@ export class HeaderNavComponent {
                 </li>
                 <li>
                   <a
-                    href="/procedures"
+                    // href="/procedures"
                     class="nav-button"
                     onClick={e => {
                       e.preventDefault();
-                      this.navigate('/procedures');
+                      this.navigate('./procedures');
                     }}
                   >
                     Procedures
@@ -60,11 +63,11 @@ export class HeaderNavComponent {
                 </li>
                 <li>
                   <a
-                    href="/about"
+                    // href="/logout"
                     class="nav-button"
                     onClick={e => {
                       e.preventDefault();
-                      this.navigate('/about');
+                      this.navigate('./logout');
                     }}
                   >
                     Logout

@@ -14,12 +14,14 @@ export namespace Components {
         "apiBase": string;
     }
     interface AppComponent {
+        "apiBase": string;
         /**
           * Base URL for your API endpoints
          */
-        "apiBase": string;
+        "basePath": string;
     }
     interface HeaderNavComponent {
+        "basePath": string;
     }
     interface PaymentEditorComponent {
         "apiBase": string;
@@ -212,12 +214,14 @@ declare namespace LocalJSX {
         "onView-procedures"?: (event: AmbulanceListComponentCustomEvent<string>) => void;
     }
     interface AppComponent {
+        "apiBase": string;
         /**
           * Base URL for your API endpoints
          */
-        "apiBase": string;
+        "basePath"?: string;
     }
     interface HeaderNavComponent {
+        "basePath"?: string;
     }
     interface PaymentEditorComponent {
         "apiBase": string;

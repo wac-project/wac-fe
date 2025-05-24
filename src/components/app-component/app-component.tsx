@@ -8,6 +8,7 @@ import { Component, Prop, State, h } from '@stencil/core';
 })
 export class AppComponent {
   /** Base URL for your API endpoints */
+  @Prop() basePath: string = '';
   @Prop() apiBase!: string;
 
   /** Which view to render */
@@ -34,7 +35,7 @@ export class AppComponent {
   }
 
   private updateView(path: string) {
-    const parts = path.split('/').filter(p => p);
+    const parts = path.replace(this.basePath, '').split('/').filter(p => p);
     const [first, second, third] = parts;
 
     // Drill into procedures for a specific ambulance
@@ -45,55 +46,56 @@ export class AppComponent {
     }
 
     switch (first) {
-  case 'entry':
-    this.view = 'editor';
-    this.ambulanceId = second || '';
-    break;
+      case 'entry':
+        this.view = 'editor';
+        this.ambulanceId = second || '';
+        break;
 
-  case 'procedures':
-    this.view = second ? 'procedure-editor' : 'procedures';
-    this.procedureId = second || '';
-    break;
+      case 'procedures':
+        this.view = second ? 'procedure-editor' : 'procedures';
+        this.procedureId = second || '';
+        break;
 
-  case 'procedure': // OK
-    this.view = 'procedure-editor';
-    this.procedureId = second || '';
-    break;
+      case 'procedure': // OK
+        this.view = 'procedure-editor';
+        this.procedureId = second || '';
+        break;
 
-  case 'payments':
-    this.view = second ? 'payment-editor' : 'payments';
-    this.paymentId = second || '';
-    break;
+      case 'payments':
+        this.view = second ? 'payment-editor' : 'payments';
+        this.paymentId = second || '';
+        break;
 
-  case 'payment':
-    this.view = 'payment-editor';
-    this.paymentId = second || '';
-  break;
+      case 'payment':
+        this.view = 'payment-editor';
+        this.paymentId = second || '';
+        break;
 
-  default:
-    this.view = 'ambulances';
-    break;
-}
+      default:
+        this.view = 'ambulances';
+        break;
+    }
   }
 
   private navigate(url: string) {
-    window.history.pushState({}, '', url);
+    const absolute = new URL(url, new URL(this.basePath, document.baseURI)).pathname;
+    window.history.pushState({}, '', absolute);
     this.updateView(window.location.pathname);
   }
 
   render() {
     return (
       <div class="app-container">
-        <header-nav-component></header-nav-component>
+        <header-nav-component base-path={this.basePath}></header-nav-component>
         {/* Ambulances list with “View Procedures” button */}
         {this.view === 'ambulances' && (
           <ambulance-list-component
             apiBase={this.apiBase}
             onEntry-clicked={(ev: CustomEvent<string>) =>
-              this.navigate(`/entry/${ev.detail}`)
+              this.navigate(`./entry/${ev.detail}`)
             }
             onView-procedures={(ev: CustomEvent<string>) =>
-              this.navigate(`/ambulances/${ev.detail}/procedures`)
+              this.navigate(`./ambulances/${ev.detail}/procedures`)
             }
           />
         )}
@@ -103,7 +105,7 @@ export class AppComponent {
           <ambulance-editor-component
             ambulanceId={this.ambulanceId}
             apiBase={this.apiBase}
-            onEditor-closed={() => this.navigate('/ambulances')}
+            onEditor-closed={() => this.navigate('./ambulances')}
           />
         )}
 
@@ -113,7 +115,7 @@ export class AppComponent {
             apiBase={this.apiBase}
             ambulanceId={this.ambulanceId}
             onProcedure-clicked={(ev: CustomEvent<string>) =>
-              this.navigate(`/procedures/${ev.detail}`) // ✅ use plural
+              this.navigate(`./procedures/${ev.detail}`) // ✅ use plural
             }
           />
         )}
@@ -124,7 +126,7 @@ export class AppComponent {
           <procedure-list-component
             apiBase={this.apiBase}
             onProcedure-clicked={(ev: CustomEvent<string>) =>
-              this.navigate(`/procedure/${ev.detail}`)
+              this.navigate(`./procedure/${ev.detail}`)
             }
           />
         )}
@@ -135,7 +137,7 @@ export class AppComponent {
             procedureId={this.procedureId}
             apiBase={this.apiBase}
             onProcedure-editor-closed={() =>
-              this.navigate('/procedures')
+              this.navigate('./procedures')
             }
           />
         )}
@@ -145,7 +147,7 @@ export class AppComponent {
           <payment-list-component
             apiBase={this.apiBase}
             onPayment-clicked={(ev: CustomEvent<string>) =>
-              this.navigate(`/payment/${ev.detail}`)
+              this.navigate(`./payment/${ev.detail}`)
             }
           />
         )}
@@ -156,7 +158,7 @@ export class AppComponent {
             paymentId={this.paymentId}
             apiBase={this.apiBase}
             onPayment-editor-closed={() =>
-              this.navigate('/payments')
+              this.navigate('./payments')
             }
           />
         )}
